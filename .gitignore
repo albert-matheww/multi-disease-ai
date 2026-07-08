@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data (raw/processed data can be large; keep small sample data tracked, ignore full downloads if needed)
+data/raw/*.cache
+data/processed/*.tmp
+
+# Models (large binary artifacts — TabPFN model files embed training data + weights)
+models/*.pkl
+models/*.joblib
+!models/.gitkeep
+
+# Reports (generated per-run PDF reports, prediction history DB)
+reports/generated/*.pdf
+reports/generated/*.html
+!reports/generated/.gitkeep
+reports/prediction_history.db
+
+# Streamlit
+.streamlit/secrets.toml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
+
+# TabPFN local cache
+.tabpfn/
