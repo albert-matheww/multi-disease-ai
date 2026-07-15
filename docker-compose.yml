@@ -1,0 +1,20 @@
+services:
+  app:
+    build: .
+    image: multidiseaseai:latest
+    ports:
+      - "8501:8501"
+    environment:
+      # Required once for TabPFN to download model weights (see README ->
+      # "TabPFN License Setup"). Docker Compose auto-loads a local .env file
+      # (gitignored) in this directory for ${...} substitution below, e.g.:
+      #   TABPFN_TOKEN=your-api-key-here
+      - TABPFN_TOKEN=${TABPFN_TOKEN:-}
+    volumes:
+      # Persist data/models/reports across container rebuilds so the
+      # download -> preprocess -> train -> evaluate pipeline doesn't need to
+      # rerun every time the image is rebuilt.
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./reports:/app/reports
+    restart: unless-stopped
