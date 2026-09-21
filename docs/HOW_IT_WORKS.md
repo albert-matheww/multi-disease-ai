@@ -175,9 +175,11 @@ constant per disease** (the same for every patient). With `α = 0.10` the target
 K-fold analogue of the jackknife interval (Barber et al., 2021, Eq. 7), not the
 CV+ variant that carries a proven guarantee, so coverage is approximate. Because
 `h` does not depend on the patient, the band says nothing about how hard a
-particular patient is; when the model is only moderately accurate `h` is large and
-the band spans the midpoint, which carries no class information. It replaces the
-old "confidence = |p − 0.5|".
+particular patient is, and it is not an interval for the *true probability*: the
+coverage target is the binary label. For a binary label the score `|y − p|` equals
+the standard label-set conformal score `1 − p_true`, so the band is best read as a
+conformal label set - informative when it excludes one of the two labels. It
+replaces the old "confidence = |p − 0.5|".
 
 ### 5b. Learned decision threshold
 

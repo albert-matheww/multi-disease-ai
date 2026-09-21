@@ -311,8 +311,11 @@ prediction is still a single TabPFN forward pass (see
   global value per disease**, so the band is the same width for every patient
   (it does not adapt to how hard a given patient is), and it is the K-fold
   analogue of a jackknife interval rather than the CV+ construction that
-  carries a proven guarantee - its coverage is approximate. A band that spans
-  the midpoint carries no class information. This replaces the old
+  carries a proven guarantee - its coverage is approximate. The coverage
+  target is the *binary label*, not the true probability, so the band is best
+  read as a conformal label set: it is informative when it excludes one of the
+  two labels (for a binary label the score `|y − p|` is the same as the
+  standard `1 − p_true` conformal score). This replaces the old
   `confidence = |p − 0.5|`, which only measured distance from the midpoint.
 - **Learned decision threshold.** The positive/negative call uses the
   probability cutoff that maximises Youden's J on the out-of-fold
