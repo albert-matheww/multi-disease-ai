@@ -99,8 +99,12 @@ def evaluate_disease(disease_key: str) -> dict:
     X_test = test_df[feature_order].to_numpy()
     y_test = test_df["target"].to_numpy()
 
-    y_pred = model.predict(X_test)
+    y_pred = model.predict(X_test)  # default rule (argmax, i.e. a 0.5 cutoff on P(y=1))
     y_proba = model.predict_proba(X_test)[:, 1]
+    # The app labels patients with the learned Youden threshold stored in the bundle, so
+    # score that rule too; older bundles without one fall back to 0.5.
+    threshold = float(bundle.get("decision_threshold", 0.5) or 0.5)
+    y_pred_served = (y_proba >= threshold).astype(int)
 
     metrics = {
         "disease": disease_key,
@@ -110,6 +114,14 @@ def evaluate_disease(disease_key: str) -> dict:
         "recall": float(recall_score(y_test, y_pred, zero_division=0)),
         "f1_score": float(f1_score(y_test, y_pred, zero_division=0)),
         "roc_auc": float(roc_auc_score(y_test, y_proba)),
+        "decision_threshold": threshold,
+        "at_decision_threshold": {
+            "accuracy": float(accuracy_score(y_test, y_pred_served)),
+            "precision": float(precision_score(y_test, y_pred_served, zero_division=0)),
+            "recall": float(recall_score(y_test, y_pred_served, zero_division=0)),
+            "f1_score": float(f1_score(y_test, y_pred_served, zero_division=0)),
+            "confusion_matrix": confusion_matrix(y_test, y_pred_served).tolist(),
+        },
         "confusion_matrix": confusion_matrix(y_test, y_pred).tolist(),
         "classification_report": classification_report(
             y_test, y_pred, target_names=[disease.negative_label, disease.positive_label], output_dict=True
