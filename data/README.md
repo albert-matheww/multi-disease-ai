@@ -13,11 +13,12 @@ python -m src.preprocessing
 
 - **Source**: Cleveland Clinic Foundation subset of the UCI Heart Disease dataset,
   accessed via [`ucimlrepo`](https://pypi.org/project/ucimlrepo/) (`fetch_ucirepo(id=45)`).
-- **Citation**: Janosi, A., Steinbrunn, W., Pfisterer, M., & Detrano, R. (1988).
+- **Citation**: Janosi, A., Steinbrunn, W., Pfisterer, M., & Detrano, R. (1989).
   Heart Disease [Dataset]. UCI Machine Learning Repository.
   https://doi.org/10.24432/C52P4X
-- **License**: Available for academic/research use under the UCI Machine Learning
-  Repository's open redistribution terms.
+  (year as in UCI's suggested citation; the dataset was donated 1988-06-30).
+- **License**: Creative Commons Attribution 4.0 International (CC BY 4.0), as stated on
+  the dataset's UCI page.
 - **Rows / Columns**: 303 rows x 13 features + 1 target (`num`).
 - **Target**: `num` (0 = no disease, 1-4 = increasing severity). We binarize to
   `0` = no heart disease, `1` = heart disease present (`num > 0`), which is the
@@ -35,7 +36,9 @@ python -m src.preprocessing
   (NIDDK), redistributed as a public-domain CSV mirror
   (`jbrownlee/Datasets` on GitHub — a commonly used, unmodified copy of the
   original UCI/NIDDK data).
-- **License**: Public domain (US government-funded research data).
+- **License**: none is stated in the dataset documentation. The data is redistributed
+  through a public mirror and is used here for research only; check the original
+  source's terms before redistributing it.
 - **Rows / Columns**: 768 rows x 8 features + 1 target (`outcome`).
 - **Population**: All patients are female, at least 21 years old, of Pima
   Indian heritage, near Phoenix, Arizona.
@@ -56,8 +59,8 @@ python -m src.preprocessing
 - **Citation**: Rubini, L., Soundarapandian, P., & Eswaran, P. (2015).
   Chronic Kidney Disease [Dataset]. UCI Machine Learning Repository.
   https://doi.org/10.24432/C5G020
-- **License**: Available for academic/research use under UCI's open
-  redistribution terms.
+- **License**: Creative Commons Attribution 4.0 International (CC BY 4.0), as stated on
+  the dataset's UCI page.
 - **Rows / Columns**: 400 rows x 24 features + 1 target (`class`).
 - **Target**: `class` (`ckd` vs `notckd`). One raw label has a trailing tab
   character (`"ckd\t"`), stripped during preprocessing.
@@ -75,11 +78,12 @@ python -m src.preprocessing
 
 - **Source**: UCI Machine Learning Repository, accessed via `ucimlrepo`
   (`fetch_ucirepo(id=225)`).
-- **Citation**: Ramana, B., & Venkateswarlu, N. (2012). ILPD (Indian Liver
+- **Citation**: Ramana, B., & Venkateswarlu, N. (2022). ILPD (Indian Liver
   Patient Dataset) [Dataset]. UCI Machine Learning Repository.
   https://doi.org/10.24432/C5D02C
-- **License**: Available for academic/research use under UCI's open
-  redistribution terms.
+  (year as in UCI's suggested citation; the dataset was donated 2012-05-20).
+- **License**: Creative Commons Attribution 4.0 International (CC BY 4.0), as stated on
+  the dataset's UCI page.
 - **Rows / Columns**: 583 rows x 10 features + 1 target (`Selector`).
 - **Target**: `Selector` (1 = liver patient, 2 = non-liver patient in the raw
   data). Remapped to `1` = liver disease, `0` = no liver disease.

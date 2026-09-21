@@ -10,10 +10,15 @@ foundation model for tabular data, used as the *sole* modeling algorithm
 throughout — no Random Forest, XGBoost, or hand-tuned baseline anywhere in
 the pipeline. The project pairs that model with a full data-science
 workflow: leakage-safe preprocessing, exploratory data analysis, SHAP-based
-explainability, a Streamlit dashboard, PDF report generation, Docker
-deployment, and a CI-gated test suite.
+explainability, **distribution-free conformal probability bands**, a
+**Mahalanobis novelty / out-of-distribution check**, a Streamlit dashboard,
+PDF report generation, Docker + **Hugging Face Space** deployment, and a
+CI-gated test suite.
 
 Built as a capstone project for a Foundations of Data Science course.
+
+> New to the codebase? [`docs/HOW_IT_WORKS.md`](docs/HOW_IT_WORKS.md) walks
+> the whole system end to end, in the order data flows through it.
 
 ---
 
@@ -28,9 +33,11 @@ Built as a capstone project for a Foundations of Data Science course.
 - [Installation](#installation)
 - [Usage](#usage)
 - [Results](#results)
+- [Uncertainty & Novelty Detection](#uncertainty--novelty-detection)
 - [Explainability](#explainability)
 - [Testing](#testing)
 - [Docker](#docker)
+- [Deploy to Hugging Face Spaces](#deploy-to-hugging-face-spaces)
 - [Limitations](#limitations)
 - [Future Work](#future-work)
 - [References](#references)
@@ -49,11 +56,15 @@ For each disease, the pipeline:
 3. **Winsorizes outliers** and **ordinally encodes** categorical fields, fit
    strictly on the training split to avoid leakage.
 4. **Trains a TabPFNClassifier** — no hyperparameter search needed.
-5. **Evaluates** with accuracy, precision, recall, F1, ROC-AUC, confusion
+5. **Calibrates** cheaply-servable uncertainty: a k-fold out-of-fold pass
+   bakes a 90% cross-conformal probability band, a Youden-J decision
+   threshold, and a robust-Mahalanobis novelty detector into the same model
+   bundle (see [Uncertainty & Novelty Detection](#uncertainty--novelty-detection)).
+6. **Evaluates** with accuracy, precision, recall, F1, ROC-AUC, confusion
    matrices, and ROC/PR curves.
-6. **Explains** predictions with SHAP (global importance + per-patient local
+7. **Explains** predictions with SHAP (global importance + per-patient local
    explanations).
-7. **Serves** predictions through a Streamlit dashboard with batch scoring,
+8. **Serves** predictions through a Streamlit dashboard with batch scoring,
    prediction history/monitoring, and downloadable PDF reports.
 
 ## Why TabPFN?
@@ -156,7 +167,7 @@ MultiDiseaseAI/
 ├── reports/
 │   ├── figures/               # EDA + evaluation + SHAP plots
 │   └── generated/            # Per-prediction downloadable PDF reports
-├── tests/                    # pytest suite (63 tests)
+├── tests/                    # pytest suite (81 tests)
 ├── scripts/                  # download_data.py, generate_eda_notebooks.py
 ├── main.py                   # Pipeline orchestrator CLI
 ├── requirements.txt
@@ -286,6 +297,37 @@ a README. Every other artifact that doesn't depend on that one external
 gate — the EDA notebooks, the preprocessing pipeline, the Streamlit UI, the
 test suite — *is* fully executed and checked into this repository.
 
+## Uncertainty & Novelty Detection
+
+Every prediction ships with three add-ons that are **computed once at
+training time and read straight from the model bundle**, so serving a
+prediction is still a single TabPFN forward pass (see
+[`src/uncertainty.py`](src/uncertainty.py)):
+
+- **90% cross-conformal probability band.** A `CV_FOLDS`-way stratified
+  out-of-fold pass produces an honest held-out probability for every
+  training row; the sorted `|y − p|` residuals give a distribution-free
+  half-width, so `62%` becomes `62% (48–74%)`. The half-width is **one
+  global value per disease**, so the band is the same width for every patient
+  (it does not adapt to how hard a given patient is), and it is the K-fold
+  analogue of a jackknife interval rather than the CV+ construction that
+  carries a proven guarantee - its coverage is approximate. A band that spans
+  the midpoint carries no class information. This replaces the old
+  `confidence = |p − 0.5|`, which only measured distance from the midpoint.
+- **Learned decision threshold.** The positive/negative call uses the
+  probability cutoff that maximises Youden's J on the out-of-fold
+  predictions, per disease — not a blind 0.5 — which matters given CKD
+  (62.5%) and liver (71.2%) are class-imbalanced.
+- **Robust-Mahalanobis novelty check.** A Ledoit-Wolf-shrunk Gaussian is fit
+  on the encoded training features; an input beyond the 97.5% training
+  distance quantile is flagged `out_of_distribution`, with a 0–1
+  `novelty_score`. Because the source cohorts are small and narrow (Pima =
+  one sex/ethnicity; Cleveland = one 1980s hospital), most real inputs sit
+  at or past the edge of what the model saw — the dashboard and PDF now say
+  so instead of returning a confident-looking number.
+
+Run `python -m src.train --no-calibrate` to skip the out-of-fold pass.
+
 ## Explainability
 
 TabPFN is a transformer, not a tree ensemble or linear model, so SHAP's
@@ -307,14 +349,16 @@ TabPFN's per-call cost. It produces:
 pytest tests/ -v
 ```
 
-63 tests cover the disease-config registry's internal consistency, the
+81 tests cover the disease-config registry's internal consistency, the
 clinically-grounded feature engineering math, the preprocessing pipeline
-(leakage-safety, dataset-specific missing-value quirks), the prediction
-wiring, and PDF report content. The prediction/report tests swap in a
-`LogisticRegression` for the saved model via `monkeypatch` — `DiseasePredictor`
-only depends on the sklearn `predict_proba` interface TabPFN also
-implements, so this validates all the wiring around the model without
-requiring network access to download TabPFN's weights in CI.
+(leakage-safety, dataset-specific missing-value quirks), the uncertainty
+module (conformal band, Youden threshold, novelty detector), the prediction
+wiring, and PDF report content. The prediction/report/uncertainty tests swap
+in a `LogisticRegression` for the saved model via `monkeypatch` —
+`DiseasePredictor` and everything in `src/uncertainty.py` only depend on the
+sklearn `predict_proba` interface TabPFN also implements, so this validates
+all the wiring around the model without requiring network access to download
+TabPFN's weights in CI.
 
 ## Docker
 
@@ -325,7 +369,36 @@ docker compose up --build
 
 Serves the dashboard at <http://localhost:8501>. `data/`, `models/`, and
 `reports/` are mounted as volumes so the pipeline's outputs persist across
-container rebuilds.
+container rebuilds. The image runs as a non-root user (uid 1000) so the same
+build also runs unmodified on a Hugging Face Space.
+
+## Deploy to Hugging Face Spaces
+
+The intended hosting path is **pre-train locally, bundle the models, mirror
+to a Docker Space** (TabPFN's weights are licence-gated, so training can't
+happen in CI):
+
+1. Train once with your token, then commit the bundles (`models/*_tabpfn.joblib`
+   is Git LFS-tracked via [`.gitattributes`](.gitattributes)):
+
+   ```bash
+   cp .env.example .env            # add TABPFN_TOKEN
+   python main.py --stages preprocess,train,evaluate,explain
+   git lfs install
+   git add models/*.joblib reports/*_metrics.json reports/figures && git commit -m "Bundle models"
+   ```
+
+2. Add GitHub **secret** `HF_TOKEN` (write scope) and **variable** `HF_SPACE`
+   (e.g. `you/MultiDiseaseAI`).
+3. Push to `main`. After CI passes,
+   [`.github/workflows/deploy-hf-space.yml`](.github/workflows/deploy-hf-space.yml)
+   runs [`deploy/huggingface/sync_space.py`](deploy/huggingface/sync_space.py),
+   which mirrors the repo (LFS models included) into the Space and sets its
+   card from [`deploy/huggingface/README.md`](deploy/huggingface/README.md).
+   The Space rebuilds the repo `Dockerfile` and serves on port 8501.
+
+Full notes, including the offline-weights options, are in
+[`deploy/huggingface/README.md`](deploy/huggingface/README.md).
 
 ## Limitations
 
@@ -347,13 +420,20 @@ container rebuilds.
 
 ## Future Work
 
-- Calibration analysis (reliability diagrams) on top of the existing
-  ROC/PR evaluation.
+- Reliability diagrams / Brier / ECE per disease, alongside the conformal
+  band now shipped (the band gives coverage; a reliability plot would show
+  pointwise calibration).
+- Repeated / nested cross-validation with confidence intervals instead of a
+  single 80/20 split — the training folds here are small enough
+  (heart ≈ 242 rows) that one split is noisy.
 - External validation on a second, independent cohort per disease.
-- A model-monitoring view that tracks prediction-distribution drift over
-  time, beyond the current history/summary stats in the dashboard.
-- Multi-label joint modeling (a patient's comorbidity across diseases)
-  instead of four independent single-disease models.
+- Decision-curve analysis (net benefit vs. treat-all / treat-none) to pick
+  the decision threshold by clinical utility rather than Youden's J alone.
+- A drift view that tracks input-distribution shift (PSI / K-S) and the
+  out-of-distribution rate over time, beyond the current history summary.
+- Multi-label joint modeling of comorbidity — noting the four source
+  datasets are disjoint populations, so this needs a cohort with shared
+  patients.
 
 ## References
 
@@ -365,7 +445,7 @@ container rebuilds.
   Second. *ICLR 2023*.
 - Lundberg, S. M., & Lee, S.-I. (2017). A Unified Approach to Interpreting
   Model Predictions. *NeurIPS 2017*. (SHAP)
-- Janosi, A., Steinbrunn, W., Pfisterer, M., & Detrano, R. (1988). Heart
+- Janosi, A., Steinbrunn, W., Pfisterer, M., & Detrano, R. (1989). Heart
   Disease. *UCI Machine Learning Repository*. https://doi.org/10.24432/C52P4X
 - Smith, J. W., Everhart, J. E., Dickson, W. C., Knowler, W. C., & Johannes,
   R. S. (1988). Using the ADAP learning algorithm to forecast the onset of
@@ -373,7 +453,7 @@ container rebuilds.
   Care*.
 - Rubini, L., Soundarapandian, P., & Eswaran, P. (2015). Chronic Kidney
   Disease. *UCI Machine Learning Repository*. https://doi.org/10.24432/C5G020
-- Ramana, B., & Venkateswarlu, N. (2012). ILPD (Indian Liver Patient
+- Ramana, B., & Venkateswarlu, N. (2022). ILPD (Indian Liver Patient
   Dataset). *UCI Machine Learning Repository*. https://doi.org/10.24432/C5D02C
 
 ## License
