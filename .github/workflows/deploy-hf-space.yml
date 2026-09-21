@@ -1,0 +1,43 @@
+name: Deploy to Hugging Face Space
+
+# Mirrors the repo into a Hugging Face Docker Space after CI is green on main.
+# Requires:
+#   secret   HF_TOKEN  - Hugging Face token, write scope
+#   variable HF_SPACE  - target space id, e.g. your-username/MultiDiseaseAI
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [main]
+
+concurrency:
+  group: deploy-hf-space
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    # Manual runs always proceed; automatic runs only if CI passed.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install huggingface_hub
+        run: pip install "huggingface_hub>=0.24"
+
+      - name: Sync repository to the Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SPACE: ${{ vars.HF_SPACE }}
+        run: python deploy/huggingface/sync_space.py

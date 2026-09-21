@@ -23,10 +23,15 @@ env/
 data/raw/*.cache
 data/processed/*.tmp
 
-# Models (large binary artifacts — TabPFN model files embed training data + weights)
+# Models. The preprocessor + TabPFN bundles are committed on purpose (the
+# "pre-train + bundle" deploy flow ships them to the Hugging Face Space), with
+# the big TabPFN bundles tracked via Git LFS — see .gitattributes.
 models/*.pkl
-models/*.joblib
+!models/*.joblib
 !models/.gitkeep
+
+# TabPFN's downloaded pretrained weights (cached at runtime, never committed).
+.tabpfn_models/
 
 # Reports (generated per-run PDF reports, prediction history DB)
 reports/generated/*.pdf
@@ -51,3 +56,7 @@ logs/
 
 # TabPFN local cache
 .tabpfn/
+
+# Paper working folder: saved third-party paper texts must never be committed
+paper-draft/sources/
+paper-draft/results_dryrun/

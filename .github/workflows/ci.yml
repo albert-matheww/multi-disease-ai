@@ -17,9 +17,9 @@ jobs:
       - name: Install lint tools
         run: pip install black ruff
       - name: Check formatting (black)
-        run: black --check src app tests scripts main.py
+        run: black --check src app tests scripts deploy main.py
       - name: Lint (ruff)
-        run: ruff check src app tests scripts main.py
+        run: ruff check src app tests scripts deploy main.py
 
   test:
     runs-on: ubuntu-latest

@@ -1,0 +1,8 @@
+# The fitted TabPFN bundles embed the training context (and, depending on the
+# tabpfn version, the transformer weights), so they can be tens of MB — track
+# them with Git LFS. The tiny preprocessor artifacts stay as normal git blobs.
+models/*_tabpfn.joblib filter=lfs diff=lfs merge=lfs -text
+models/*.ckpt filter=lfs diff=lfs merge=lfs -text
+
+# Keep notebooks and CSVs as normal text so diffs stay reviewable.
+*.ipynb -text

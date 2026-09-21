@@ -13,8 +13,9 @@ services:
     volumes:
       # Persist data/models/reports across container rebuilds so the
       # download -> preprocess -> train -> evaluate pipeline doesn't need to
-      # rerun every time the image is rebuilt.
-      - ./data:/app/data
-      - ./models:/app/models
-      - ./reports:/app/reports
+      # rerun every time the image is rebuilt. Paths match the in-image
+      # WORKDIR (/home/user/app) set by the Dockerfile's non-root user.
+      - ./data:/home/user/app/data
+      - ./models:/home/user/app/models
+      - ./reports:/home/user/app/reports
     restart: unless-stopped
