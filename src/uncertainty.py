@@ -6,11 +6,13 @@ O(log n) / O(d^2) arithmetic - no extra model calls, no per-request lag.
 
 Two capabilities are added on top of the bare probability:
 
-* **Cross-conformal probability band** (CV+ style). k-fold out-of-fold
-  predicted probabilities form a distribution-free calibration set; at
-  inference the point probability is widened to a band with ~(1 - ``alpha``)
-  marginal coverage. This replaces "confidence = distance from 0.5" with an
-  honest interval.
+* **Out-of-fold residual band** (a K-fold analogue of the jackknife interval).
+  k-fold out-of-fold predicted probabilities give absolute residuals
+  ``|y - p|`` against the binary label; at inference the point probability is
+  widened by one global half-width, the (1 - ``alpha``) residual quantile.
+  Read as a set of labels it coincides with a conformal label set (score
+  ``1 - p_true``), so the target is coverage of the *label*, approximately -
+  it is not the CV+ interval, which would need the fold models at query time.
 * **Robust-Mahalanobis out-of-distribution score**. A Ledoit-Wolf-shrunk
   Gaussian is fit on the encoded training features; a live record beyond a
   high training-distance quantile is flagged as *unlike the cohort the model
@@ -66,7 +68,7 @@ def oof_probabilities(
 
 
 # --------------------------------------------------------------------------- #
-# Split-conformal probability band
+# Out-of-fold residual probability band
 # --------------------------------------------------------------------------- #
 def conformal_residuals(oof_proba: np.ndarray, y: np.ndarray) -> np.ndarray:
     """Absolute-residual nonconformity scores ``|y - p|``, sorted ascending."""
@@ -92,7 +94,7 @@ def conformal_halfwidth(residuals: np.ndarray, alpha: float = 0.10) -> float:
 
 
 def probability_band(p_hat: float, residuals: np.ndarray, alpha: float = 0.10) -> tuple[float, float]:
-    """Widen a point probability to a ``[lo, hi]`` conformal band, clipped to [0, 1]."""
+    """Widen a point probability to a ``[lo, hi]`` residual band, clipped to [0, 1]."""
     h = conformal_halfwidth(residuals, alpha)
     if not np.isfinite(h):
         return (float(p_hat), float(p_hat))
