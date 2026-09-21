@@ -19,6 +19,19 @@ from typing import Callable
 # Filesystem layout
 # --------------------------------------------------------------------------- #
 ROOT_DIR = Path(__file__).resolve().parent.parent
+
+# Load a local .env (TABPFN_TOKEN, etc.) as early as possible. config.py is
+# imported by every entry point - the pipeline CLI, src.train, src.prediction,
+# the Streamlit app, the tests - so doing it here means `.env` "just works"
+# everywhere without each caller remembering to. Real environment variables
+# (an explicit `export`, or docker-compose's `environment:`) still win.
+try:  # pragma: no cover - trivial, and python-dotenv is a hard dependency
+    from dotenv import load_dotenv
+
+    load_dotenv(ROOT_DIR / ".env")
+except ModuleNotFoundError:
+    pass
+
 DATA_DIR = ROOT_DIR / "data"
 RAW_DATA_DIR = DATA_DIR / "raw"
 PROCESSED_DATA_DIR = DATA_DIR / "processed"
@@ -33,8 +46,15 @@ for _d in (PROCESSED_DATA_DIR, MODELS_DIR, FIGURES_DIR, GENERATED_REPORTS_DIR):
 RANDOM_STATE = 42
 TEST_SIZE = 0.2
 
-# Risk-level thresholds applied to the predicted probability of disease.
+# Risk-level display bands applied to the predicted probability of disease.
 RISK_THRESHOLDS = {"low": 0.33, "moderate": 0.66}
+
+# Uncertainty / novelty-detection settings (see src/uncertainty.py). These are
+# consumed at training time; serving a prediction just reads precomputed values
+# out of the model bundle.
+CONFORMAL_ALPHA = 0.10  # -> 90% cross-conformal probability band
+OOD_QUANTILE = 0.975  # training Mahalanobis-distance quantile above which a record is "novel"
+CV_FOLDS = 5  # folds for out-of-fold calibration / threshold selection
 
 
 @dataclass(frozen=True)
@@ -387,3 +407,17 @@ def get_disease(key: str) -> DiseaseConfig:
         return DISEASES[key]
     except KeyError as exc:
         raise KeyError(f"Unknown disease key '{key}'. Available: {list(DISEASES)}") from exc
+
+
+def humanize_feature_name(disease_key: str, feature_name: str) -> str:
+    """Map a raw or engineered feature name to a display label.
+
+    Falls back to a title-cased version of the raw name for engineered
+    features that have no ``FieldSpec`` (e.g. ``rate_pressure_product`` ->
+    "Rate Pressure Product"). Shared by the PDF report and the dashboard so
+    they never disagree on how a feature is labelled.
+    """
+    for field_spec in get_disease(disease_key).fields:
+        if field_spec.name == feature_name:
+            return field_spec.label
+    return feature_name.replace("_", " ").replace("/", " / ").title()

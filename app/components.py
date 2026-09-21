@@ -10,7 +10,7 @@ from __future__ import annotations
 import plotly.graph_objects as go
 import streamlit as st
 
-from src.config import DiseaseConfig
+from src.config import DiseaseConfig, humanize_feature_name
 from src.prediction import PredictionResult
 
 
@@ -60,8 +60,17 @@ def reset_patient_form(disease: DiseaseConfig) -> None:
             del st.session_state[key]
 
 
-def render_probability_gauge(probability: float, risk_level: str) -> go.Figure:
+def render_probability_gauge(
+    probability: float,
+    risk_level: str,
+    band: tuple[float, float] | None = None,
+) -> go.Figure:
     color = {"Low": "#2e7d32", "Moderate": "#e65100", "High": "#b71c1c"}.get(risk_level, "#455a64")
+    title = "Predicted Probability of Disease"
+    if band is not None:
+        title += (
+            f"<br><span style='font-size:0.8em;color:#888'>{band[0]:.0%}–{band[1]:.0%} conformal band</span>"
+        )
     fig = go.Figure(
         go.Indicator(
             mode="gauge+number",
@@ -86,16 +95,33 @@ def render_probability_gauge(probability: float, risk_level: str) -> go.Figure:
                     "value": probability * 100,
                 },
             },
-            title={"text": "Predicted Probability of Disease"},
+            title={"text": title},
         )
     )
-    fig.update_layout(height=280, margin=dict(l=40, r=40, t=50, b=10))
+    # Shade the conformal band as a translucent overlay on the arc.
+    if band is not None:
+        fig.add_trace(
+            go.Indicator(
+                mode="gauge",
+                value=band[1] * 100,
+                domain={"x": [0.08, 0.92], "y": [0, 1]},
+                gauge={
+                    "axis": {"range": [0, 100], "visible": False},
+                    "bar": {"color": "rgba(0,0,0,0)"},
+                    "steps": [{"range": [band[0] * 100, band[1] * 100], "color": "rgba(69,90,100,0.28)"}],
+                },
+            )
+        )
+    fig.update_layout(height=280, margin=dict(l=40, r=40, t=60, b=10))
     return fig
 
 
-def render_contributor_chart(top_contributors: list[dict]) -> go.Figure:
+def render_contributor_chart(top_contributors: list[dict], disease_key: str | None = None) -> go.Figure:
     contributors = list(reversed(top_contributors))
-    labels = [c["feature"] for c in contributors]
+    labels = [
+        humanize_feature_name(disease_key, c["feature"]) if disease_key else c["feature"]
+        for c in contributors
+    ]
     values = [c["shap_value"] for c in contributors]
     colors = ["#c62828" if v > 0 else "#2e7d32" for v in values]
 

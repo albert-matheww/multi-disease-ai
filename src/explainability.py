@@ -31,12 +31,19 @@ _MAX_BACKGROUND = 25
 class DiseaseExplainer:
     """Wraps a fitted disease model with a SHAP explainer for that model."""
 
-    def __init__(self, disease_key: str, model, feature_order: list[str], background_data: np.ndarray):
+    def __init__(
+        self,
+        disease_key: str,
+        model,
+        feature_order: list[str],
+        background_data: np.ndarray,
+        max_background: int = _MAX_BACKGROUND,
+    ):
         self.disease_key = disease_key
         self.model = model
         self.feature_order = feature_order
 
-        n_background = min(_MAX_BACKGROUND, len(background_data))
+        n_background = min(max_background, len(background_data))
         if len(background_data) > n_background:
             self.background = shap.kmeans(background_data, n_background).data
         else:

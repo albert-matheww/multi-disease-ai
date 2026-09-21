@@ -2,8 +2,9 @@
 
 Backs two bonus features: the Streamlit app's "Prediction History" page and
 its lightweight "Model Monitoring" view (predictions served over time, risk
-distribution). A local SQLite file is more than sufficient for a
-single-user academic demo app and requires no external service.
+distribution, out-of-distribution rate). A local SQLite file is more than
+sufficient for a single-user academic demo app and requires no external
+service.
 """
 
 from __future__ import annotations
@@ -32,11 +33,26 @@ CREATE TABLE IF NOT EXISTS predictions (
 );
 """
 
+# Columns added after the original schema shipped. Applied idempotently on every
+# connect via ``ALTER TABLE ... ADD COLUMN`` (SQLite raises if the column already
+# exists, so each is guarded).
+_MIGRATIONS = {
+    "probability_low": "REAL",
+    "probability_high": "REAL",
+    "decision_threshold": "REAL",
+    "out_of_distribution": "INTEGER",
+    "novelty_score": "REAL",
+}
+
 
 def _connect() -> sqlite3.Connection:
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(DB_PATH)
     conn.execute(_SCHEMA)
+    existing = {row[1] for row in conn.execute("PRAGMA table_info(predictions)")}
+    for column, decl in _MIGRATIONS.items():
+        if column not in existing:
+            conn.execute(f"ALTER TABLE predictions ADD COLUMN {column} {decl}")
     return conn
 
 
@@ -51,8 +67,10 @@ def save_prediction(result: PredictionResult) -> None:
             """
             INSERT INTO predictions
                 (timestamp, disease_key, disease_display_name, probability,
-                 predicted_label, risk_level, confidence, patient_input)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                 predicted_label, risk_level, confidence, patient_input,
+                 probability_low, probability_high, decision_threshold,
+                 out_of_distribution, novelty_score)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 result.timestamp,
@@ -63,6 +81,11 @@ def save_prediction(result: PredictionResult) -> None:
                 result.risk_level,
                 result.confidence,
                 json.dumps(result.patient_input),
+                result.probability_low,
+                result.probability_high,
+                result.decision_threshold,
+                int(result.out_of_distribution),
+                result.novelty_score,
             ),
         )
 

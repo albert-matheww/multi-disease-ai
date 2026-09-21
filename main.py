@@ -36,11 +36,11 @@ def run_preprocess(disease_keys: list[str]) -> None:
         DiseasePreprocessor(get_disease(key)).run()
 
 
-def run_train(disease_keys: list[str], device: str) -> None:
+def run_train(disease_keys: list[str], device: str, n_estimators: int, calibrate: bool) -> None:
     from src.train import train_disease
 
     for key in disease_keys:
-        train_disease(key, device=device)
+        train_disease(key, device=device, n_estimators=n_estimators, calibrate=calibrate)
 
 
 def run_evaluate(disease_keys: list[str]) -> None:
@@ -77,6 +77,14 @@ def main() -> None:
     parser.add_argument(
         "--device", default="cpu", help="TabPFN device for the train stage: cpu, cuda, mps, auto"
     )
+    parser.add_argument(
+        "--n-estimators", type=int, default=8, help="TabPFN ensemble size for the train stage"
+    )
+    parser.add_argument(
+        "--no-calibrate",
+        action="store_true",
+        help="Train stage: skip the out-of-fold conformal / threshold / novelty-detector pass",
+    )
     args = parser.parse_args()
 
     stages = [s.strip() for s in args.stages.split(",") if s.strip()]
@@ -96,7 +104,12 @@ def main() -> None:
     if "preprocess" in stages:
         run_preprocess(disease_keys)
     if "train" in stages:
-        run_train(disease_keys, device=args.device)
+        run_train(
+            disease_keys,
+            device=args.device,
+            n_estimators=args.n_estimators,
+            calibrate=not args.no_calibrate,
+        )
     if "evaluate" in stages:
         run_evaluate(disease_keys)
     if "explain" in stages:

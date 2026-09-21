@@ -19,6 +19,7 @@ from sklearn.linear_model import LogisticRegression
 from src.config import DiseaseConfig, get_disease
 from src.prediction import DiseasePredictor, risk_level_from_probability
 from src.preprocessing import DiseasePreprocessor
+from src.uncertainty import OODDetector, conformal_residuals, oof_probabilities, youden_threshold
 
 
 @pytest.mark.parametrize(
@@ -128,3 +129,69 @@ def test_feature_order_raw_excludes_engineered_features(heart_predictor):
     assert "rate_pressure_product" not in raw_fields
     assert "heart_rate_reserve" not in raw_fields
     assert set(raw_fields) == set(SAMPLE_HEART_PATIENT)
+
+
+@pytest.fixture
+def heart_predictor_calibrated(tmp_path, monkeypatch) -> DiseasePredictor:
+    """Like `heart_predictor` but the saved bundle also carries the precomputed
+    conformal residuals, learned threshold, and novelty detector - so the
+    uncertainty wiring in `DiseasePredictor.predict` is exercised end to end."""
+    disease = get_disease("heart")
+    DiseasePreprocessor(disease).run()
+
+    stub_model_path = tmp_path / "heart_calibrated_model.joblib"
+    monkeypatch.setattr(DiseaseConfig, "model_path", property(lambda self: stub_model_path))
+
+    train_df = pd.read_csv(disease.processed_train_path)
+    feature_order = [c for c in train_df.columns if c != "target"]
+    X = train_df[feature_order].to_numpy()
+    y = train_df["target"].to_numpy()
+    clf = LogisticRegression(max_iter=1000).fit(X, y)
+
+    oof = oof_probabilities(lambda: LogisticRegression(max_iter=1000), X, y, n_splits=4, random_state=42)
+    joblib.dump(
+        {
+            "model": clf,
+            "feature_order": feature_order,
+            "disease_key": "heart",
+            "decision_threshold": youden_threshold(oof, y),
+            "conformal_residuals": conformal_residuals(oof, y),
+            "conformal_alpha": 0.10,
+            "ood": OODDetector.fit(X),
+        },
+        stub_model_path,
+    )
+    return DiseasePredictor("heart")
+
+
+def test_predict_populates_conformal_band(heart_predictor_calibrated):
+    result = heart_predictor_calibrated.predict(SAMPLE_HEART_PATIENT, explain=False)
+    assert 0.0 <= result.probability_low <= result.probability <= result.probability_high <= 1.0
+    assert result.probability_high > result.probability_low  # a real interval, not degenerate
+    assert 0.0 < result.decision_threshold < 1.0
+    assert 0.0 <= result.novelty_score <= 1.0
+    assert isinstance(result.out_of_distribution, bool)
+
+
+def test_predicted_label_respects_learned_threshold(heart_predictor_calibrated):
+    p = heart_predictor_calibrated
+    result = p.predict(SAMPLE_HEART_PATIENT, explain=False)
+    expected_positive = result.probability >= p.decision_threshold
+    assert (result.predicted_label == p.disease.positive_label) == expected_positive
+
+
+def test_batch_emits_band_and_ood_columns(heart_predictor_calibrated):
+    df = pd.DataFrame([SAMPLE_HEART_PATIENT, SAMPLE_HEART_PATIENT])
+    out = heart_predictor_calibrated.predict_batch(df)
+    for col in ("probability_low", "probability_high", "out_of_distribution"):
+        assert col in out.columns
+    assert (out["probability_low"] <= out["probability"]).all()
+    assert (out["probability"] <= out["probability_high"]).all()
+
+
+def test_explanation_is_cached(heart_predictor_calibrated):
+    p = heart_predictor_calibrated
+    p.predict(SAMPLE_HEART_PATIENT, top_n=5)
+    assert len(p._explain_cache) == 1
+    p.predict(SAMPLE_HEART_PATIENT, top_n=5)  # identical input -> cache hit, no new entry
+    assert len(p._explain_cache) == 1

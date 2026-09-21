@@ -24,7 +24,7 @@ from reportlab.platypus import (
     TableStyle,
 )
 
-from src.config import GENERATED_REPORTS_DIR, get_disease
+from src.config import GENERATED_REPORTS_DIR, get_disease, humanize_feature_name
 from src.prediction import PredictionResult
 
 _RISK_COLORS = {
@@ -72,15 +72,8 @@ def _humanize_patient_input(disease_key: str, patient_input: dict) -> list[tuple
 
 
 def _humanize_feature_name(disease_key: str, feature_name: str) -> str:
-    """Map an engineered/raw feature name to a display label, falling back to
-    a title-cased version of the raw name for engineered features that have
-    no `FieldSpec` (e.g. `rate_pressure_product`)."""
-    disease = get_disease(disease_key)
-    field_by_name = {f.name: f for f in disease.fields}
-    field = field_by_name.get(feature_name)
-    if field is not None:
-        return field.label
-    return feature_name.replace("_", " ").title()
+    """Back-compat shim; canonical implementation lives in `src.config`."""
+    return humanize_feature_name(disease_key, feature_name)
 
 
 def build_report_pdf(result: PredictionResult) -> bytes:
@@ -106,12 +99,18 @@ def build_report_pdf(result: PredictionResult) -> bytes:
     # --- Prediction summary -----------------------------------------
     story.append(Paragraph("Prediction Summary", styles["heading"]))
     risk_color = _RISK_COLORS.get(result.risk_level, colors.black)
+    band_pct = int(round((1 - result.band_alpha) * 100))
     summary_data = [
         ["Predicted Outcome", result.predicted_label],
         ["Probability of Disease", f"{result.probability:.1%}"],
-        ["Model Confidence", f"{result.confidence:.1%}"],
+        [
+            f"{band_pct}% Conformal Band",
+            f"{result.probability_low:.1%} – {result.probability_high:.1%}",
+        ],
+        ["Decision Threshold", f"{result.decision_threshold:.0%}"],
         ["Risk Level", result.risk_level],
     ]
+    risk_row = len(summary_data) - 1
     summary_table = Table(summary_data, colWidths=[2.3 * inch, 3.5 * inch])
     summary_table.setStyle(
         TableStyle(
@@ -120,8 +119,8 @@ def build_report_pdf(result: PredictionResult) -> bytes:
                 ("BACKGROUND", (0, 0), (-1, -1), colors.HexColor("#f5f5f5")),
                 ("BOX", (0, 0), (-1, -1), 0.5, colors.grey),
                 ("INNERGRID", (0, 0), (-1, -1), 0.5, colors.white),
-                ("TEXTCOLOR", (1, 3), (1, 3), risk_color),
-                ("FONTNAME", (1, 3), (1, 3), "Helvetica-Bold"),
+                ("TEXTCOLOR", (1, risk_row), (1, risk_row), risk_color),
+                ("FONTNAME", (1, risk_row), (1, risk_row), "Helvetica-Bold"),
                 ("TOPPADDING", (0, 0), (-1, -1), 6),
                 ("BOTTOMPADDING", (0, 0), (-1, -1), 6),
                 ("LEFTPADDING", (0, 0), (-1, -1), 8),
@@ -129,6 +128,19 @@ def build_report_pdf(result: PredictionResult) -> bytes:
         )
     )
     story.append(summary_table)
+
+    if result.out_of_distribution:
+        story.append(Spacer(1, 8))
+        story.append(
+            Paragraph(
+                f"&#9888; <b>Novelty warning.</b> This record sits outside "
+                f"{result.novelty_score:.0%} of the training cohort on a "
+                "robust-Mahalanobis distance, i.e. it is unlike the data this model "
+                "learned from. Treat the probability above as low-confidence and "
+                "defer to clinical judgement.",
+                styles["body"],
+            )
+        )
 
     # --- Patient input ------------------------------------------------
     story.append(Paragraph("Patient Input", styles["heading"]))
