@@ -52,7 +52,7 @@ RISK_THRESHOLDS = {"low": 0.33, "moderate": 0.66}
 # Uncertainty / novelty-detection settings (see src/uncertainty.py). These are
 # consumed at training time; serving a prediction just reads precomputed values
 # out of the model bundle.
-CONFORMAL_ALPHA = 0.10  # -> 90% cross-conformal probability band
+CONFORMAL_ALPHA = 0.10  # -> 90% probability band (K-fold residual band; see src/uncertainty.py)
 OOD_QUANTILE = 0.975  # training Mahalanobis-distance quantile above which a record is "novel"
 CV_FOLDS = 5  # folds for out-of-fold calibration / threshold selection
 
@@ -78,7 +78,6 @@ class FieldSpec:
 class DiseaseConfig:
     key: str
     display_name: str
-    icon: str
     description: str
     raw_filename: str
     target_column: str
@@ -131,7 +130,6 @@ class DiseaseConfig:
 HEART = DiseaseConfig(
     key="heart",
     display_name="Heart Disease",
-    icon="\U0001fac0",
     description=(
         "Predicts the presence of heart disease from clinical and exercise-test "
         "attributes (UCI Cleveland dataset)."
@@ -205,7 +203,6 @@ HEART = DiseaseConfig(
 DIABETES = DiseaseConfig(
     key="diabetes",
     display_name="Diabetes",
-    icon="\U0001f489",
     description=(
         "Predicts the presence of diabetes from metabolic and anthropometric "
         "measurements (Pima Indians Diabetes dataset)."
@@ -261,7 +258,6 @@ DIABETES = DiseaseConfig(
 CKD = DiseaseConfig(
     key="ckd",
     display_name="Chronic Kidney Disease",
-    icon="\U0001fa78",
     description=(
         "Predicts chronic kidney disease from urinalysis, blood chemistry, "
         "and clinical signs (UCI CKD dataset)."
@@ -352,7 +348,6 @@ CKD = DiseaseConfig(
 LIVER = DiseaseConfig(
     key="liver",
     display_name="Liver Disease",
-    icon="\U0001fac1",
     description=(
         "Predicts liver disease from liver-function-test panel results "
         "(Indian Liver Patient Dataset, ILPD)."

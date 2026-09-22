@@ -44,7 +44,6 @@ from src.report import build_report_pdf
 
 st.set_page_config(
     page_title="MultiDiseaseAI",
-    page_icon="\U0001fa7a",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -84,20 +83,19 @@ def _load_predictor_safely(disease_key: str) -> DiseasePredictor | None:
 
 def render_sidebar() -> tuple[str, str, bool]:
     with st.sidebar:
-        st.markdown("## \U0001fa7a MultiDiseaseAI")
+        st.markdown("## MultiDiseaseAI")
         st.caption("Early multi-disease risk prediction using TabPFN")
         page = st.radio("Navigate", PAGES, label_visibility="collapsed")
 
         st.divider()
-        disease_labels = {key: f"{d.icon} {d.display_name}" for key, d in DISEASES.items()}
         disease_key = st.selectbox(
             "Disease",
             list(DISEASES.keys()),
-            format_func=lambda k: disease_labels[k],
+            format_func=lambda k: DISEASES[k].display_name,
         )
 
         st.divider()
-        dark_mode = st.toggle("\U0001f319 Dark Mode", value=st.session_state.get("dark_mode", False))
+        dark_mode = st.toggle("Dark Mode", value=st.session_state.get("dark_mode", False))
         st.session_state["dark_mode"] = dark_mode
 
         st.divider()
@@ -119,7 +117,6 @@ def _render_result_panel(result: PredictionResult, disease_key: str) -> None:
             f"**Novelty warning** — this record is unlike ~{result.novelty_score:.0%} of the "
             "training cohort (robust-Mahalanobis distance). The probability below is "
             "low-confidence; treat it as indicative only.",
-            icon="⚠️",
         )
 
     render_result_summary(result)
@@ -149,7 +146,7 @@ def _render_result_panel(result: PredictionResult, disease_key: str) -> None:
         st.dataframe(pd.DataFrame(result.top_contributors), use_container_width=True, hide_index=True)
 
     st.download_button(
-        "\U0001f4c4 Download Prediction Report (PDF)",
+        "Download Prediction Report (PDF)",
         data=_cached_report_pdf(result),
         file_name=f"{disease_key}_report_{result.timestamp.replace(':', '-')}.pdf",
         mime="application/pdf",
@@ -165,7 +162,7 @@ def _render_result_panel(result: PredictionResult, disease_key: str) -> None:
 
 def page_predict(disease_key: str) -> None:
     disease = get_disease(disease_key)
-    st.title(f"{disease.icon} {disease.display_name} Risk Prediction")
+    st.title(f"{disease.display_name} Risk Prediction")
     st.write(disease.description)
 
     predictor = _load_predictor_safely(disease_key)
@@ -175,7 +172,7 @@ def page_predict(disease_key: str) -> None:
     col_form, col_reset = st.columns([6, 1])
     with col_reset:
         st.write("")
-        if st.button("↻ Reset", use_container_width=True):
+        if st.button("Reset", use_container_width=True):
             reset_patient_form(disease)
             st.session_state.pop(f"result_{disease_key}", None)
             st.rerun()
@@ -198,7 +195,7 @@ def page_predict(disease_key: str) -> None:
 
 def page_batch(disease_key: str) -> None:
     disease = get_disease(disease_key)
-    st.title(f"\U0001f4c1 Batch Prediction - {disease.display_name}")
+    st.title(f"Batch Prediction - {disease.display_name}")
     st.write(
         "Upload a CSV with one row per patient and one column per field below. "
         "Categorical columns must use the same raw values as the source dataset "
@@ -241,7 +238,6 @@ def page_batch(disease_key: str) -> None:
             st.warning(
                 f"{n_ood} of {len(results_df)} rows are outside the training distribution "
                 "and flagged in the `out_of_distribution` column.",
-                icon="⚠️",
             )
     st.dataframe(results_df, use_container_width=True)
 
@@ -249,7 +245,7 @@ def page_batch(disease_key: str) -> None:
     st.bar_chart(risk_counts)
 
     st.download_button(
-        "\U0001f4e5 Export Predictions (CSV)",
+        "Export Predictions (CSV)",
         data=results_df.to_csv(index=False).encode(),
         file_name=f"{disease_key}_batch_predictions.csv",
         mime="text/csv",
@@ -259,7 +255,7 @@ def page_batch(disease_key: str) -> None:
 
 def page_model_performance(disease_key: str) -> None:
     disease = get_disease(disease_key)
-    st.title(f"\U0001f4ca Model Performance - {disease.display_name}")
+    st.title(f"Model Performance - {disease.display_name}")
 
     st.markdown(
         "**Why TabPFN?** TabPFN is a transformer-based *foundation model for "
@@ -317,7 +313,7 @@ def page_model_performance(disease_key: str) -> None:
 
 
 def page_history() -> None:
-    st.title("\U0001f553 Prediction History & Monitoring")
+    st.title("Prediction History & Monitoring")
 
     history_df = load_history()
     if history_df.empty:
@@ -351,26 +347,27 @@ def page_history() -> None:
 
     dl_col, clear_col = st.columns(2)
     dl_col.download_button(
-        "\U0001f4e5 Export History (CSV)",
+        "Export History (CSV)",
         data=filtered.to_csv(index=False).encode(),
         file_name="prediction_history.csv",
         mime="text/csv",
         use_container_width=True,
     )
-    if clear_col.button("\U0001f5d1 Clear History", use_container_width=True):
+    if clear_col.button("Clear History", use_container_width=True):
         clear_history()
         st.rerun()
 
 
 def page_about() -> None:
-    st.title("ℹ️ About MultiDiseaseAI")
+    st.title("About MultiDiseaseAI")
     st.markdown("""
 MultiDiseaseAI predicts the probability of four diseases - **Heart Disease**,
 **Diabetes**, **Chronic Kidney Disease**, and **Liver Disease** - from
 routine clinical measurements, using **TabPFN** as the sole modeling
 algorithm.
 
-Every prediction carries a **90% cross-conformal probability band**, a
+Every prediction carries a **90% probability band** (a K-fold residual band,
+equivalent to a conformal label set — see `docs/HOW_IT_WORKS.md`), a
 **learned decision threshold** (Youden's J on out-of-fold predictions), and
 a **robust-Mahalanobis novelty check** that flags inputs unlike the training
 cohort. All three are precomputed at training time, so serving a prediction

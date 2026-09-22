@@ -45,7 +45,7 @@ def render_patient_form(disease: DiseaseConfig) -> dict | None:
                 selected_label = col.selectbox(field.label, labels, index=default_index, key=widget_key)
                 raw_record[field.name] = field.categories[selected_label]
 
-        submitted = st.form_submit_button("🔍 Predict Risk", use_container_width=True, type="primary")
+        submitted = st.form_submit_button("Predict Risk", use_container_width=True, type="primary")
 
     if submitted:
         return raw_record

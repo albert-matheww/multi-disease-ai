@@ -57,7 +57,7 @@ For each disease, the pipeline:
    strictly on the training split to avoid leakage.
 4. **Trains a TabPFNClassifier** — no hyperparameter search needed.
 5. **Calibrates** cheaply-servable uncertainty: a k-fold out-of-fold pass
-   bakes a 90% cross-conformal probability band, a Youden-J decision
+   bakes a 90% probability band (a K-fold residual band), a Youden-J decision
    threshold, and a robust-Mahalanobis novelty detector into the same model
    bundle (see [Uncertainty & Novelty Detection](#uncertainty--novelty-detection)).
 6. **Evaluates** with accuracy, precision, recall, F1, ROC-AUC, confusion
@@ -304,7 +304,7 @@ training time and read straight from the model bundle**, so serving a
 prediction is still a single TabPFN forward pass (see
 [`src/uncertainty.py`](src/uncertainty.py)):
 
-- **90% cross-conformal probability band.** A `CV_FOLDS`-way stratified
+- **90% probability band (K-fold residual band).** A `CV_FOLDS`-way stratified
   out-of-fold pass produces an honest held-out probability for every
   training row; the sorted `|y − p|` residuals give a distribution-free
   half-width, so `62%` becomes `62% (48–74%)`. The half-width is **one
