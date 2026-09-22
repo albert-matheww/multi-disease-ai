@@ -95,20 +95,27 @@ enlarged threshold/preprocessing comparison counts (24->36 threshold, 44->68 pre
 
 ## Open items
 
-1. **Not compiled.** No TeX toolchain on this machine. `paper.tex` / `references.bib` are generated, not
-   visually checked; the two new screenshot figures (Fig. 3, Fig. 4) are tall single-column images and may
-   need a `\resizebox` or two-column `figure*` treatment once a toolchain is available to check layout.
-   `paper_numbered.md` is a readable copy in the meantime.
+1. ~~**Not compiled.**~~ **Resolved 2026-09-23.** Installed `tectonic` (a self-contained TeX engine, via
+   Homebrew) and compiled `paper.tex` to a 9-page `paper.pdf`. Compiling caught a real bug the text-only
+   reads had missed: `tools/build_paper.py` wrote author names straight into `references.bib` without LaTeX
+   escaping, so accented names (Müller, Körfer, Gaël, Rügamer, Édouard) came out as raw UTF-8 that classic
+   BibTeX/pdfTeX cannot render, producing a `U+FFFD` glyph in one place in the compiled PDF. Fixed by adding
+   an accent-to-LaTeX-command map to `bib_esc()` and applying it to the author field (previously only title
+   and venue were escaped); recompiled clean, references list now renders every accented name correctly. I
+   also moved Tables IV and VIII (7 columns each) from single-column to two-column-spanning floats after
+   visually inspecting a single-column render and finding the text legible but noticeably smaller than every
+   other table; both now render at normal size. Visually checked all 9 pages at 150-300 dpi: all ten tables,
+   both figures from Section III/V-E, and both new screenshot figures (Fig. 3, Fig. 4) render without
+   overlap, truncation or overflow. `paper_numbered.md` remains available as a plain-text copy.
 2. **Length: 5,080 body words against the ~4,000 target (+27%).** The overage is real evidence, not padding:
    filling the TabPFN cells (round 2) and adding the live-implementation section with reasoning for every
    design choice (round 3, this request) each added content that did not exist to trim from the 3,835-word
    first draft. Two trimming passes on round 2 cut roughly 460 words without losing a quantitative claim;
    round 3 was not further trimmed because the user explicitly asked for the screenshots and the step-by-step
    reasoning that account for the added length. Flagging this rather than silently exceeding the target.
-3. **Harness is untracked.** `paper-draft/` (including `capture_screenshots.py`, `latency_batch_vs_single.py`
-   and the extended `derived_stats.py`) is committed to the repository as of `f98de79`; this round's additions
-   (the screenshot script, the two composited figures, `reports/heart_metrics.json`'s dependency) are not yet
-   committed — see the commit made right after this report for that.
+3. ~~**Harness is untracked.**~~ **Resolved.** All of `paper-draft/` (script harness, results, figures,
+   screenshots, `paper.tex`/`.bib`/`.pdf`) is committed to the repository; see the commits following this
+   report for the exact set.
 4. Affiliation in the author block is still a placeholder.
 5. `ledoit2004` remains metadata-only (the publisher host failed TLS verification; not bypassed).
 6. **The screenshots show a real, minor implementation gap**, not previously documented: the interactive SHAP

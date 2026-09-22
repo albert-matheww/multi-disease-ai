@@ -158,12 +158,11 @@ The shipped 20\% split is a coarse instrument: TabPFN's fixed-split AUC was 0.95
 
 We replaced the project's pipeline (median imputation, winsorization, engineered features, train-only fitting) with each alternative in turn: for logistic regression and gradient boosting at three repeats (44 pairs), and for TabPFN at one repeat, compute cost permitting (24 pairs; TabPFN also natively accepts missing values, so it ran the native-missing variant too, unlike logistic regression). Table IV summarises all 68 pairs. None reached p $<$ 0.05 in either group; the smallest p was 0.205 (reference models) and 0.100 (TabPFN); the largest change in AUC was 0.0056 (reference models) and 0.0041 (TabPFN). Removing the engineered features lowered AUC in two reference-model pairs, both gradient boosting (heart $-$0.0053, liver $-$0.0051), raised it in the rest by at most 0.0031, and left kidney disease unchanged for every model. So we cannot claim that winsorization, median imputation or the engineered features improve accuracy for any of the three models tested, and we cannot claim they harm it.
 
-\begin{table}[!t]
+\begin{table*}[!t]
 \caption{Change in ROC-AUC relative to the project's preprocessing (variant minus project); smallest Nadeau--Bengio p over pairs with a defined test.}
 \label{tab:preproc}
 \centering\footnotesize
-\resizebox{\columnwidth}{!}{%
-\begin{tabular}{lcccccc}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}Xcccccc}
 \toprule
 \textbf{Variant} & \textbf{Ref. pairs} & \textbf{Ref. $\Delta$AUC range} & \textbf{Ref. min p} & \textbf{TabPFN pairs} & \textbf{TabPFN $\Delta$AUC range} & \textbf{TabPFN min p} \\
 \midrule
@@ -174,8 +173,8 @@ kNN imputation (k = 5) & 8 & $-$0.0022 to +0.0025 & 0.259 & 4 & $-$0.0039 to +0.
 Native missing values & 4 & $-$0.0056 to +0.0006 & 0.363 & 4 & $-$0.0006 to +0.0003 & 0.704 \\
 Leaky: fit on train + test & 8 & $-$0.0003 to +0.0015 & 0.512 & 4 & $-$0.0001 to +0.0012 & 0.184 \\
 \bottomrule
-\end{tabular}}
-\end{table}
+\end{tabularx}
+\end{table*}
 
 The leaky variant fits the imputation and winsorization statistics on train plus test data, the form the leakage taxonomy lists as preprocessing on the training and test set \cite{kapoor2023}. It changed AUC by at most 0.0015 for the reference models and 0.0012 for TabPFN. On these datasets the leak-safe design therefore costs nothing measurable for any of the three models tested, and its justification is correctness rather than accuracy. This does not show that leakage is harmless in general: medians and IQR bounds are low-capacity statistics, and we did not test flexible preprocessing such as target encoding. Native missing-value handling was not distinguishable from imputation for either gradient boosting or TabPFN \cite{hollmann2025}, so imputation does not appear necessary for models that accept missing values directly.
 
@@ -254,12 +253,11 @@ The project's detector held its nominal rate on all four datasets (0.030 to 0.03
 
 We timed a single-row \texttt{predict\_proba} call in a loop over the first 20 test rows of each disease, then the permutation explainer at background sizes 10 and 25 on the same rows, then KernelSHAP at background 10 for comparison (Table VIII). A single unbatched prediction cost 0.70 to 1.17 seconds. A separate, direct comparison on the same fitted model --- the same 20 rows scored one at a time versus batched --- found the single-row path 18 to 20 times slower per row (581--1,144 ms singly against 32--59 ms per row batched). The interactive, one-patient-at-a-time dashboard path therefore does not get TabPFN's batching efficiency; a form submission pays close to the full per-call overhead every time.
 
-\begin{table}[!t]
+\begin{table*}[!t]
 \caption{SHAP background 10 vs 25 (median seconds per explanation, 20 test rows, CPU) and single-row \texttt{predict\_proba} latency.}
 \label{tab:shap}
 \centering\footnotesize
-\resizebox{\columnwidth}{!}{%
-\begin{tabular}{lcccccc}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}Xcccccc}
 \toprule
 \textbf{Disease} & \textbf{predict\_proba (ms/row)} & \textbf{bg = 10 (s)} & \textbf{bg = 25 (s)} & \textbf{Speed-up} & \textbf{Spearman (mean / min)} & \textbf{Top-3 overlap (mean / min)} \\
 \midrule
@@ -268,8 +266,8 @@ Diabetes (10 features) & 1167 & 15.8 & 37.4 & 2.37$\times$ & 0.93 / 0.67 & 2.75 
 Heart (16 features) & 702 & 18.0 & 27.0 & 1.50$\times$ & 0.96 / 0.92 & 2.70 / 2 \\
 Liver (12 features) & 898 & 25.9 & 33.9 & 1.31$\times$ & 0.95 / 0.85 & 2.80 / 2 \\
 \bottomrule
-\end{tabular}}
-\end{table}
+\end{tabularx}
+\end{table*}
 
 Cutting the background from 25 to 10 rows saved 1.3 to 2.4$\times$ on explanation time, with high mean rank agreement (Spearman 0.92--0.96). The saving and the agreement varied by dataset rather than tracking feature count simply: diabetes (10 features) gave the largest saving (2.37$\times$) but the widest per-row spread (Spearman as low as 0.67 for one patient); kidney (25 features) gave the smallest top-3 overlap (1.95 of 3) and the only case where the two background sizes agreed on \emph{none} of the top three features for one patient --- plausibly because, once many features carry near-zero attribution on this near-separable task, their relative ranking is dominated by sampling noise a larger background does not resolve; we did not test this further. KernelSHAP did not uniformly lose to the permutation explainer as the background-10 comparison in \cite{realtime2026} suggests: it beat permutation-background-25 on diabetes (16.95 s vs 37.4 s) and liver (29.63 s vs 33.9 s), and lost on heart (34.05 s vs 27.0 s) and kidney (38.1 s vs 24.4 s), with rank agreement against permutation-25 of 0.82--0.96 --- the literature finding does not transfer cleanly here; neither explainer dominates.
 

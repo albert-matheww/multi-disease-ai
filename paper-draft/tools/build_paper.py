@@ -76,7 +76,7 @@ def inline(s: str) -> str:
     return "".join(out)
 
 
-WIDE = {"tab:verdict", "tab:novelty"}
+WIDE = {"tab:verdict", "tab:novelty", "tab:preproc", "tab:shap"}
 
 
 def table_tex(caption: str, label: str, rows: list[list[str]]) -> str:
@@ -147,15 +147,36 @@ def build_tex() -> str:
 
 
 # ------------------------------------------------------------------ BibTeX ----------------
+# Classic BibTeX (what tectonic/plain LaTeX invokes for a .bst-based bibliography, unlike biber)
+# does not reliably round-trip raw UTF-8 bytes through .bbl -> pdfTeX's 8-bit fonts; accented
+# Latin letters must be given as LaTeX accent commands instead, or they surface as U+FFFD in the
+# compiled PDF (found by actually compiling the paper, not assumed).
+_ACCENTS = {
+    "ä": '"a', "ë": '"e', "ï": '"i', "ö": '"o', "ü": '"u', "ÿ": '"y',
+    "Ä": '"A', "Ë": '"E', "Ï": '"I', "Ö": '"O', "Ü": '"U',
+    "á": "'a", "é": "'e", "í": "'i", "ó": "'o", "ú": "'u", "ý": "'y",
+    "Á": "'A", "É": "'E", "Í": "'I", "Ó": "'O", "Ú": "'U",
+    "à": "`a", "è": "`e", "ì": "`i", "ò": "`o", "ù": "`u",
+    "À": "`A", "È": "`E", "Ì": "`I", "Ò": "`O", "Ù": "`U",
+    "â": "^a", "ê": "^e", "î": "^i", "ô": "^o", "û": "^u",
+    "Â": "^A", "Ê": "^E", "Î": "^I", "Ô": "^O", "Û": "^U",
+    "ã": "~a", "ñ": "~n", "õ": "~o", "Ã": "~A", "Ñ": "~N", "Õ": "~O",
+    "ç": "c{c}", "Ç": "c{C}", "ø": "o{o}", "Ø": "o{O}", "å": "r{a}", "Å": "r{A}",
+    "ł": "l{}", "Ł": "L{}", "š": "v{s}", "Š": "v{S}", "č": "v{c}", "Č": "v{C}", "ž": "v{z}", "Ž": "v{Z}",
+}
+
+
 def bib_esc(s: str) -> str:
     s = html.unescape(s or "")
+    for ch, cmd in _ACCENTS.items():
+        s = s.replace(ch, f"\\{cmd}")
     return s.replace("&", r"\&").replace("%", r"\%").replace("#", r"\#").replace("_", r"\_")
 
 
 def bib_entry(k: str) -> str:
     r = REFS[k]
     venue = html.unescape(r.get("venue") or "")
-    authors = " and ".join(r["authors"])
+    authors = " and ".join(bib_esc(a) for a in r["authors"])
     f = {"author": authors, "title": "{" + bib_esc(r["title"]) + "}", "year": str(r["year"])}
     conf = re.search(r"Proc\.|Conference|Symposium|Workshop|Neural Information|Summits|Communications in Computer", venue)
     if r.get("preprint"):
