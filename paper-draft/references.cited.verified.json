@@ -1,0 +1,655 @@
+[
+  {
+    "key": "hollmann2025",
+    "status": "VERIFIED",
+    "matched_via": "doi",
+    "issues": [],
+    "warnings": [],
+    "record": {
+      "title": "Accurate predictions on small data with a tabular foundation model",
+      "authors": [
+        "Hollmann",
+        "Müller",
+        "Purucker",
+        "Krishnakumar",
+        "Körfer",
+        "Hoo",
+        "Schirrmeister",
+        "Hutter"
+      ],
+      "year": 2025,
+      "venue": "Nature",
+      "id": "10.1038/s41586-024-08328-6",
+      "retracted": false,
+      "source": "crossref"
+    }
+  },
+  {
+    "key": "clinbench2026",
+    "status": "VERIFIED",
+    "matched_via": "doi",
+    "issues": [],
+    "warnings": [],
+    "record": {
+      "title": "Established Machine Learning Matches Tabular Foundation Models in Clinical Predictions",
+      "authors": [
+        "Shaktah",
+        "Gustav",
+        "Lenz",
+        "Liang",
+        "Hilgers",
+        "Carrero",
+        "Kather"
+      ],
+      "year": 2026,
+      "venue": "",
+      "id": "10.64898/2026.02.02.26345274",
+      "retracted": false,
+      "source": "crossref"
+    }
+  },
+  {
+    "key": "ehrsmall2026",
+    "status": "NOT_FOUND",
+    "matched_via": null,
+    "issues": [
+      "not found in Crossref, OpenAlex, or arXiv - verify by hand at the publisher/venue page, or remove"
+    ],
+    "warnings": [
+      "closest crossref candidate: 'Tabular Foundation Models for Environmental Quantitative StructureActivity Relationship: Robust Prediction with Imperfect Data' (10.1021/acs.est.6c05983.s002) - below title threshold",
+      "closest openalex candidate: 'Explainable AI for clinical and remote health applications: a survey on tabular and time series data' (https://doi.org/10.1007/s10462-022-10304-3) - below title threshold"
+    ],
+    "record": null
+  },
+  {
+    "key": "muller2022",
+    "status": "VERIFIED_WITH_WARNINGS",
+    "matched_via": "arxiv",
+    "issues": [],
+    "warnings": [
+      "year differs: cited 2022, record 2021 (preprint vs. proceedings, online-first vs. print?)",
+      "venue differs (may be an abbreviation): cited 'Proc. International Conference on Learning Representations (ICLR)', record 'arXiv'"
+    ],
+    "record": {
+      "title": "Transformers Can Do Bayesian Inference",
+      "authors": [
+        "Müller",
+        "Hollmann",
+        "Arango",
+        "Grabocka",
+        "Hutter"
+      ],
+      "year": 2021,
+      "venue": "arXiv",
+      "id": "2112.10510",
+      "retracted": false,
+      "source": "arxiv"
+    }
+  },
+  {
+    "key": "hollmann2023",
+    "status": "VERIFIED_WITH_WARNINGS",
+    "matched_via": "arxiv",
+    "issues": [],
+    "warnings": [
+      "year differs: cited 2023, record 2022 (preprint vs. proceedings, online-first vs. print?)",
+      "venue differs (may be an abbreviation): cited 'Proc. International Conference on Learning Representations (ICLR)', record 'arXiv'"
+    ],
+    "record": {
+      "title": "TabPFN: A Transformer That Solves Small Tabular Classification Problems in a Second",
+      "authors": [
+        "Hollmann",
+        "Müller",
+        "Eggensperger",
+        "Hutter"
+      ],
+      "year": 2022,
+      "venue": "arXiv",
+      "id": "2207.01848",
+      "retracted": false,
+      "source": "arxiv"
+    }
+  },
+  {
+    "key": "grinsztajn2022",
+    "status": "VERIFIED",
+    "matched_via": "arxiv",
+    "issues": [],
+    "warnings": [],
+    "record": {
+      "title": "Why do tree-based models still outperform deep learning on tabular data?",
+      "authors": [
+        "Grinsztajn",
+        "Oyallon",
+        "Varoquaux"
+      ],
+      "year": 2022,
+      "venue": "arXiv",
+      "id": "2207.08815",
+      "retracted": false,
+      "source": "arxiv"
+    }
+  },
+  {
+    "key": "lundberg2017",
+    "status": "VERIFIED_WITH_WARNINGS",
+    "matched_via": "arxiv",
+    "issues": [],
+    "warnings": [
+      "venue differs (may be an abbreviation): cited 'Advances in Neural Information Processing Systems (NIPS)', record 'arXiv'"
+    ],
+    "record": {
+      "title": "A Unified Approach to Interpreting Model Predictions",
+      "authors": [
+        "Lundberg",
+        "Lee"
+      ],
+      "year": 2017,
+      "venue": "arXiv",
+      "id": "1705.07874",
+      "retracted": false,
+      "source": "arxiv"
+    }
+  },
+  {
+    "key": "rundel2024",
+    "status": "VERIFIED",
+    "matched_via": "doi",
+    "issues": [],
+    "warnings": [],
+    "record": {
+      "title": "Interpretable Machine Learning for TabPFN",
+      "authors": [
+        "Rundel",
+        "Kobialka",
+        "von Crailsheim",
+        "Feurer",
+        "Nagler",
+        "Rügamer"
+      ],
+      "year": 2024,
+      "venue": "Communications in Computer and Information Science",
+      "id": "10.1007/978-3-031-63797-1_23",
+      "retracted": false,
+      "source": "crossref"
+    }
+  },
+  {
+    "key": "realtime2026",
+    "status": "VERIFIED_WITH_WARNINGS",
+    "matched_via": "arxiv",
+    "issues": [],
+    "warnings": [
+      "venue differs (may be an abbreviation): cited '2nd FM4Science Workshop at ICLR', record 'arXiv'"
+    ],
+    "record": {
+      "title": "Real-Time Explanations for Tabular Foundation Models",
+      "authors": [
+        "Sena",
+        "Azevedo"
+      ],
+      "year": 2026,
+      "venue": "arXiv",
+      "id": "2603.29946",
+      "retracted": false,
+      "source": "arxiv"
+    }
+  },
+  {
+    "key": "kumar2020",
+    "status": "VERIFIED",
+    "matched_via": "arxiv",
+    "issues": [],
+    "warnings": [],
+    "record": {
+      "title": "Problems with Shapley-value-based explanations as feature importance measures",
+      "authors": [
+        "Kumar",
+        "Venkatasubramanian",
+        "Scheidegger",
+        "Friedler"
+      ],
+      "year": 2020,
+      "venue": "arXiv",
+      "id": "2002.11097",
+      "retracted": false,
+      "source": "arxiv"
+    }
+  },
+  {
+    "key": "barber2021",
+    "status": "VERIFIED",
+    "matched_via": "doi",
+    "issues": [],
+    "warnings": [],
+    "record": {
+      "title": "Predictive inference with the jackknife+",
+      "authors": [
+        "Barber",
+        "Candès",
+        "Ramdas",
+        "Tibshirani"
+      ],
+      "year": 2021,
+      "venue": "The Annals of Statistics",
+      "id": "10.1214/20-aos1965",
+      "retracted": false,
+      "source": "crossref"
+    }
+  },
+  {
+    "key": "vovk2015",
+    "status": "MISMATCH",
+    "matched_via": "doi",
+    "issues": [
+      "year differs: cited 2015, record 2013"
+    ],
+    "warnings": [],
+    "record": {
+      "title": "Cross-conformal predictors",
+      "authors": [
+        "Vovk"
+      ],
+      "year": 2013,
+      "venue": "Annals of Mathematics and Artificial Intelligence",
+      "id": "10.1007/s10472-013-9368-4",
+      "retracted": false,
+      "source": "crossref"
+    }
+  },
+  {
+    "key": "angelopoulos2021",
+    "status": "VERIFIED",
+    "matched_via": "arxiv",
+    "issues": [],
+    "warnings": [],
+    "record": {
+      "title": "A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty Quantification",
+      "authors": [
+        "Angelopoulos",
+        "Bates"
+      ],
+      "year": 2021,
+      "venue": "arXiv",
+      "id": "2107.07511",
+      "retracted": false,
+      "source": "arxiv"
+    }
+  },
+  {
+    "key": "lee2018",
+    "status": "VERIFIED_WITH_WARNINGS",
+    "matched_via": "arxiv",
+    "issues": [],
+    "warnings": [
+      "venue differs (may be an abbreviation): cited 'Advances in Neural Information Processing Systems (NIPS)', record 'arXiv'"
+    ],
+    "record": {
+      "title": "A Simple Unified Framework for Detecting Out-of-Distribution Samples and Adversarial Attacks",
+      "authors": [
+        "Lee",
+        "Lee",
+        "Lee",
+        "Shin"
+      ],
+      "year": 2018,
+      "venue": "arXiv",
+      "id": "1807.03888",
+      "retracted": false,
+      "source": "arxiv"
+    }
+  },
+  {
+    "key": "ledoit2004",
+    "status": "VERIFIED",
+    "matched_via": "doi",
+    "issues": [],
+    "warnings": [],
+    "record": {
+      "title": "A well-conditioned estimator for large-dimensional covariance matrices",
+      "authors": [
+        "Ledoit",
+        "Wolf"
+      ],
+      "year": 2004,
+      "venue": "Journal of Multivariate Analysis",
+      "id": "10.1016/s0047-259x(03)00096-4",
+      "retracted": false,
+      "source": "crossref"
+    }
+  },
+  {
+    "key": "shan2015",
+    "status": "VERIFIED",
+    "matched_via": "doi",
+    "issues": [],
+    "warnings": [],
+    "record": {
+      "title": "Improved Confidence Intervals for the Youden Index",
+      "authors": [
+        "Shan"
+      ],
+      "year": 2015,
+      "venue": "PLOS ONE",
+      "id": "10.1371/journal.pone.0127272",
+      "retracted": false,
+      "source": "crossref"
+    }
+  },
+  {
+    "key": "guo2017",
+    "status": "VERIFIED",
+    "matched_via": "arxiv",
+    "issues": [],
+    "warnings": [],
+    "record": {
+      "title": "On Calibration of Modern Neural Networks",
+      "authors": [
+        "Guo",
+        "Pleiss",
+        "Sun",
+        "Weinberger"
+      ],
+      "year": 2017,
+      "venue": "arXiv",
+      "id": "1706.04599",
+      "retracted": false,
+      "source": "arxiv"
+    }
+  },
+  {
+    "key": "kapoor2023",
+    "status": "VERIFIED",
+    "matched_via": "doi",
+    "issues": [],
+    "warnings": [],
+    "record": {
+      "title": "Leakage and the reproducibility crisis in machine-learning-based science",
+      "authors": [
+        "Kapoor",
+        "Narayanan"
+      ],
+      "year": 2023,
+      "venue": "Patterns",
+      "id": "10.1016/j.patter.2023.100804",
+      "retracted": false,
+      "source": "crossref"
+    }
+  },
+  {
+    "key": "varoquaux2018",
+    "status": "VERIFIED",
+    "matched_via": "doi",
+    "issues": [],
+    "warnings": [],
+    "record": {
+      "title": "Cross-validation failure: Small sample sizes lead to large error bars",
+      "authors": [
+        "Varoquaux"
+      ],
+      "year": 2018,
+      "venue": "NeuroImage",
+      "id": "10.1016/j.neuroimage.2017.06.061",
+      "retracted": false,
+      "source": "crossref"
+    }
+  },
+  {
+    "key": "nadeau2003",
+    "status": "VERIFIED",
+    "matched_via": "doi",
+    "issues": [],
+    "warnings": [],
+    "record": {
+      "title": "Inference for the Generalization Error",
+      "authors": [
+        "Nadeau",
+        "Bengio"
+      ],
+      "year": 2003,
+      "venue": "Machine Learning",
+      "id": "10.1023/a:1024068626366",
+      "retracted": false,
+      "source": "crossref"
+    }
+  },
+  {
+    "key": "brown2001",
+    "status": "VERIFIED",
+    "matched_via": "doi",
+    "issues": [],
+    "warnings": [],
+    "record": {
+      "title": "Interval Estimation for a Binomial Proportion",
+      "authors": [
+        "Brown",
+        "Cai",
+        "DasGupta"
+      ],
+      "year": 2001,
+      "venue": "Statistical Science",
+      "id": "10.1214/ss/1009213286",
+      "retracted": false,
+      "source": "crossref"
+    }
+  },
+  {
+    "key": "diciccio1996",
+    "status": "VERIFIED",
+    "matched_via": "doi",
+    "issues": [],
+    "warnings": [],
+    "record": {
+      "title": "Bootstrap confidence intervals",
+      "authors": [
+        "DiCiccio",
+        "Efron"
+      ],
+      "year": 1996,
+      "venue": "Statistical Science",
+      "id": "10.1214/ss/1032280214",
+      "retracted": false,
+      "source": "crossref"
+    }
+  },
+  {
+    "key": "islam2023",
+    "status": "VERIFIED",
+    "matched_via": "doi",
+    "issues": [],
+    "warnings": [],
+    "record": {
+      "title": "Chronic kidney disease prediction based on machine learning algorithms",
+      "authors": [
+        "Islam",
+        "Majumder",
+        "Hussein"
+      ],
+      "year": 2023,
+      "venue": "Journal of Pathology Informatics",
+      "id": "10.1016/j.jpi.2023.100189",
+      "retracted": false,
+      "source": "crossref"
+    }
+  },
+  {
+    "key": "bouqentar2024",
+    "status": "VERIFIED",
+    "matched_via": "doi",
+    "issues": [],
+    "warnings": [],
+    "record": {
+      "title": "Early heart disease prediction using feature engineering and machine learning algorithms",
+      "authors": [
+        "Bouqentar",
+        "Terrada",
+        "Hamida",
+        "Saleh",
+        "Lamrani",
+        "Cherradi",
+        "Raihani"
+      ],
+      "year": 2024,
+      "venue": "Heliyon",
+      "id": "10.1016/j.heliyon.2024.e38731",
+      "retracted": false,
+      "source": "crossref"
+    }
+  },
+  {
+    "key": "straw2022",
+    "status": "VERIFIED",
+    "matched_via": "doi",
+    "issues": [],
+    "warnings": [],
+    "record": {
+      "title": "Investigating for bias in healthcare algorithms: a sex-stratified analysis of supervised machine learning models in liver disease prediction",
+      "authors": [
+        "Straw",
+        "Wu"
+      ],
+      "year": 2022,
+      "venue": "BMJ Health &amp; Care Informatics",
+      "id": "10.1136/bmjhci-2021-100457",
+      "retracted": false,
+      "source": "crossref"
+    }
+  },
+  {
+    "key": "uci_heart",
+    "status": "VERIFIED_WITH_WARNINGS",
+    "matched_via": "doi",
+    "issues": [],
+    "warnings": [
+      "cited authors not in the DataCite creator list (registry lists are often partial): ['steinbrunn', 'pfisterer', 'detrano']"
+    ],
+    "record": {
+      "title": "Heart Disease",
+      "authors": [
+        "Andras Janosi"
+      ],
+      "year": 1989,
+      "venue": "UCI Machine Learning Repository",
+      "id": "10.24432/c52p4x",
+      "retracted": false,
+      "source": "datacite"
+    }
+  },
+  {
+    "key": "detrano1989",
+    "status": "VERIFIED",
+    "matched_via": "doi",
+    "issues": [],
+    "warnings": [],
+    "record": {
+      "title": "International application of a new probability algorithm for the diagnosis of coronary artery disease",
+      "authors": [
+        "Detrano",
+        "Janosi",
+        "Steinbrunn",
+        "Pfisterer",
+        "Schmid",
+        "Sandhu",
+        "Guppy",
+        "Lee",
+        "Froelicher"
+      ],
+      "year": 1989,
+      "venue": "The American Journal of Cardiology",
+      "id": "10.1016/0002-9149(89)90524-9",
+      "retracted": false,
+      "source": "crossref"
+    }
+  },
+  {
+    "key": "pima_docs",
+    "status": "NOT_FOUND",
+    "matched_via": null,
+    "issues": [
+      "not found in Crossref, OpenAlex, or arXiv - verify by hand at the publisher/venue page, or remove"
+    ],
+    "warnings": [
+      "closest crossref candidate: 'Pima Indians Diabetes Database Processing through EBBM-Optimized UTM Model' (10.5220/0010806500003123) - below title threshold"
+    ],
+    "record": null
+  },
+  {
+    "key": "uci_ckd",
+    "status": "VERIFIED_WITH_WARNINGS",
+    "matched_via": "doi",
+    "issues": [],
+    "warnings": [
+      "cited authors not in the DataCite creator list (registry lists are often partial): ['soundarapandian', 'eswaran']"
+    ],
+    "record": {
+      "title": "Chronic Kidney Disease",
+      "authors": [
+        "L. Rubini"
+      ],
+      "year": 2015,
+      "venue": "UCI Machine Learning Repository",
+      "id": "10.24432/c5g020",
+      "retracted": false,
+      "source": "datacite"
+    }
+  },
+  {
+    "key": "uci_ilpd",
+    "status": "VERIFIED_WITH_WARNINGS",
+    "matched_via": "doi",
+    "issues": [],
+    "warnings": [
+      "cited authors not in the DataCite creator list (registry lists are often partial): ['venkateswarlu']"
+    ],
+    "record": {
+      "title": "ILPD (Indian Liver Patient Dataset)",
+      "authors": [
+        "Bendi Ramana"
+      ],
+      "year": 2022,
+      "venue": "UCI Machine Learning Repository",
+      "id": "10.24432/c5d02c",
+      "retracted": false,
+      "source": "datacite"
+    }
+  },
+  {
+    "key": "pedregosa2011",
+    "status": "VERIFIED_WITH_WARNINGS",
+    "matched_via": "arxiv",
+    "issues": [],
+    "warnings": [
+      "year differs: cited 2011, record 2012 (preprint vs. proceedings, online-first vs. print?)",
+      "venue differs (may be an abbreviation): cited 'Journal of Machine Learning Research', record 'arXiv'"
+    ],
+    "record": {
+      "title": "Scikit-learn: Machine Learning in Python",
+      "authors": [
+        "Pedregosa",
+        "Varoquaux",
+        "Gramfort",
+        "Michel",
+        "Thirion",
+        "Grisel",
+        "Blondel",
+        "Müller",
+        "Nothman",
+        "Louppe",
+        "Prettenhofer",
+        "Weiss",
+        "Dubourg",
+        "Vanderplas",
+        "Passos",
+        "Cournapeau",
+        "Brucher",
+        "Perrot",
+        "Duchesnay"
+      ],
+      "year": 2012,
+      "venue": "arXiv",
+      "id": "1201.0490",
+      "retracted": false,
+      "source": "arxiv"
+    }
+  }
+]

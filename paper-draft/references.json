@@ -1,0 +1,610 @@
+[
+  {
+    "title": "Accurate predictions on small data with a tabular foundation model",
+    "authors": [
+      "Hollmann, Noah",
+      "Müller, Samuel",
+      "Purucker, Lennart",
+      "Krishnakumar, Arjun",
+      "Körfer, Max",
+      "Hoo, Shi Bin",
+      "Schirrmeister, Robin Tibor",
+      "Hutter, Frank"
+    ],
+    "year": 2025,
+    "venue": "Nature",
+    "volume": "637",
+    "issue": "8045",
+    "pages": "319-326",
+    "doi": "10.1038/s41586-024-08328-6",
+    "key": "hollmann2025",
+    "read_depth": "full",
+    "used_for": "TabPFN definition, size limits, native handling of missing values/categoricals, benchmark claim",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "title": "TabPFN: A Transformer That Solves Small Tabular Classification Problems in a Second",
+    "authors": [
+      "Hollmann, Noah",
+      "Müller, Samuel",
+      "Eggensperger, Katharina",
+      "Hutter, Frank"
+    ],
+    "year": 2023,
+    "venue": "Proc. International Conference on Learning Representations (ICLR)",
+    "arxiv": "2207.01848",
+    "key": "hollmann2023",
+    "read_depth": "full",
+    "used_for": "original TabPFN: limits (1,000 rows, 100 numeric features, 10 classes)",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "title": "Transformers Can Do Bayesian Inference",
+    "authors": [
+      "Müller, Samuel",
+      "Hollmann, Noah",
+      "Arango, Sebastian Pineda",
+      "Grabocka, Josif",
+      "Hutter, Frank"
+    ],
+    "year": 2022,
+    "venue": "Proc. International Conference on Learning Representations (ICLR)",
+    "arxiv": "2112.10510",
+    "key": "muller2022",
+    "read_depth": "full",
+    "used_for": "prior-data fitted networks (PFNs) approximate Bayesian inference in one forward pass",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "title": "Why do tree-based models still outperform deep learning on tabular data?",
+    "authors": [
+      "Grinsztajn, Léo",
+      "Oyallon, Edouard",
+      "Varoquaux, Gaël"
+    ],
+    "year": 2022,
+    "venue": "arXiv",
+    "arxiv": "2207.08815",
+    "key": "grinsztajn2022",
+    "read_depth": "full",
+    "used_for": "trees vs deep learning on ~10K-sample tabular data (pre-TabPFN-v2 evidence)",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "title": "A Closer Look at TabPFN v2: Understanding Its Strengths and Extending Its Capabilities",
+    "authors": [
+      "Ye, Han-Jia",
+      "Liu, Si-Yang",
+      "Chao, Wei-Lun"
+    ],
+    "year": 2025,
+    "venue": "arXiv",
+    "arxiv": "2502.17361",
+    "key": "closerlook2025",
+    "read_depth": "abstract",
+    "used_for": "analysis of TabPFN v2 strengths and limits (abstract only)",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "title": "Established Machine Learning Matches Tabular Foundation Models in Clinical Predictions",
+    "authors": [
+      "Shaktah, Lawrence A.",
+      "Gustav, Marco",
+      "Lenz, Tim",
+      "Liang, Junhao",
+      "Hilgers, Lars",
+      "Carrero, Zunamys I.",
+      "Kather, Jakob Nikolas"
+    ],
+    "year": 2026,
+    "venue": "",
+    "volume": null,
+    "issue": null,
+    "pages": null,
+    "doi": "10.64898/2026.02.02.26345274",
+    "key": "clinbench2026",
+    "read_depth": "abstract",
+    "used_for": "clinical benchmark: TabPFN competitive, rarely best (preprint, abstract only)",
+    "preprint": true,
+    "verified_note": null
+  },
+  {
+    "title": "Real-Time Explanations for Tabular Foundation Models",
+    "authors": [
+      "Sena, Luan Borges Teodoro Reis",
+      "Azevedo, Francisco Galuppo"
+    ],
+    "year": 2026,
+    "venue": "2nd FM4Science Workshop at ICLR",
+    "arxiv": "2603.29946",
+    "key": "realtime2026",
+    "read_depth": "full",
+    "used_for": "KernelSHAP cost on tabular foundation models; ShapPFN",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "title": "A Unified Approach to Interpreting Model Predictions",
+    "authors": [
+      "Lundberg, Scott",
+      "Lee, Su-In"
+    ],
+    "year": 2017,
+    "venue": "Advances in Neural Information Processing Systems (NIPS)",
+    "arxiv": "1705.07874",
+    "key": "lundberg2017",
+    "read_depth": "full",
+    "used_for": "SHAP values",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "title": "Interpretable Machine Learning for TabPFN",
+    "authors": [
+      "Rundel, David",
+      "Kobialka, Julius",
+      "von Crailsheim, Constantin",
+      "Feurer, Matthias",
+      "Nagler, Thomas",
+      "Rügamer, David"
+    ],
+    "year": 2024,
+    "venue": "Communications in Computer and Information Science",
+    "volume": null,
+    "issue": null,
+    "pages": "465-476",
+    "doi": "10.1007/978-3-031-63797-1_23",
+    "key": "rundel2024",
+    "read_depth": "full",
+    "used_for": "TabPFN-specific Shapley/LOCO via in-context learning",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "title": "Problems with Shapley-value-based explanations as feature importance measures",
+    "authors": [
+      "Kumar, I. Elizabeth",
+      "Venkatasubramanian, Suresh",
+      "Scheidegger, Carlos",
+      "Friedler, Sorelle"
+    ],
+    "year": 2020,
+    "venue": "arXiv",
+    "arxiv": "2002.11097",
+    "key": "kumar2020",
+    "read_depth": "full",
+    "used_for": "limits of Shapley-value feature attributions",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "title": "Cross-conformal predictors",
+    "authors": [
+      "Vovk, Vladimir"
+    ],
+    "year": 2015,
+    "venue": "Annals of Mathematics and Artificial Intelligence",
+    "volume": "74",
+    "issue": "1-2",
+    "pages": "9-28",
+    "doi": "10.1007/s10472-013-9368-4",
+    "key": "vovk2015",
+    "read_depth": "full",
+    "used_for": "cross-conformal prediction (validity studied empirically)",
+    "preprint": false,
+    "verified_note": "Crossref: online 2013, print 2015 (vol. 74, issue 1-2, pp. 9-28); cited by print year"
+  },
+  {
+    "title": "Predictive inference with the jackknife+",
+    "authors": [
+      "Barber, Rina Foygel",
+      "Candès, Emmanuel J.",
+      "Ramdas, Aaditya",
+      "Tibshirani, Ryan J."
+    ],
+    "year": 2021,
+    "venue": "The Annals of Statistics",
+    "volume": "49",
+    "issue": "1",
+    "pages": null,
+    "doi": "10.1214/20-aos1965",
+    "key": "barber2021",
+    "read_depth": "full",
+    "used_for": "jackknife interval form (Eq. 7); jackknife+/CV+ guarantee",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "title": "A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty Quantification",
+    "authors": [
+      "Angelopoulos, Anastasios N.",
+      "Bates, Stephen"
+    ],
+    "year": 2021,
+    "venue": "arXiv",
+    "arxiv": "2107.07511",
+    "key": "angelopoulos2021",
+    "read_depth": "full",
+    "used_for": "marginal coverage definition; score function determines usefulness",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "title": "A Simple Unified Framework for Detecting Out-of-Distribution Samples and Adversarial Attacks",
+    "authors": [
+      "Lee, Kimin",
+      "Lee, Kibok",
+      "Lee, Honglak",
+      "Shin, Jinwoo"
+    ],
+    "year": 2018,
+    "venue": "Advances in Neural Information Processing Systems (NIPS)",
+    "arxiv": "1807.03888",
+    "key": "lee2018",
+    "read_depth": "full",
+    "used_for": "Mahalanobis-distance OOD detection on network features",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "title": "On Calibration of Modern Neural Networks",
+    "authors": [
+      "Guo, Chuan",
+      "Pleiss, Geoff",
+      "Sun, Yu",
+      "Weinberger, Kilian Q."
+    ],
+    "year": 2017,
+    "venue": "arXiv",
+    "arxiv": "1706.04599",
+    "key": "guo2017",
+    "read_depth": "full",
+    "used_for": "probability calibration of modern classifiers",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "title": "Improved Confidence Intervals for the Youden Index",
+    "authors": [
+      "Shan, Guogen"
+    ],
+    "year": 2015,
+    "venue": "PLOS ONE",
+    "volume": "10",
+    "issue": "7",
+    "pages": "e0127272",
+    "doi": "10.1371/journal.pone.0127272",
+    "key": "shan2015",
+    "read_depth": "full",
+    "used_for": "Youden index as a cut-point criterion",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "title": "A well-conditioned estimator for large-dimensional covariance matrices",
+    "authors": [
+      "Ledoit, Olivier",
+      "Wolf, Michael"
+    ],
+    "year": 2004,
+    "venue": "Journal of Multivariate Analysis",
+    "volume": "88",
+    "issue": "2",
+    "pages": "365-411",
+    "doi": "10.1016/s0047-259x(03)00096-4",
+    "key": "ledoit2004",
+    "read_depth": "metadata",
+    "used_for": "Ledoit-Wolf shrinkage; attribution taken from the scikit-learn documentation",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "title": "Leakage and the reproducibility crisis in machine-learning-based science",
+    "authors": [
+      "Kapoor, Sayash",
+      "Narayanan, Arvind"
+    ],
+    "year": 2023,
+    "venue": "Patterns",
+    "volume": "4",
+    "issue": "9",
+    "pages": "100804",
+    "doi": "10.1016/j.patter.2023.100804",
+    "key": "kapoor2023",
+    "read_depth": "full",
+    "used_for": "taxonomy of data leakage; L1: no clean train/test separation in preprocessing",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "title": "Cross-validation failure: Small sample sizes lead to large error bars",
+    "authors": [
+      "Varoquaux, Gaël"
+    ],
+    "year": 2018,
+    "venue": "NeuroImage",
+    "volume": "180",
+    "issue": null,
+    "pages": "68-77",
+    "doi": "10.1016/j.neuroimage.2017.06.061",
+    "key": "varoquaux2018",
+    "read_depth": "full",
+    "used_for": "small-sample error bars in cross-validation",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "title": "Inference for the Generalization Error",
+    "authors": [
+      "Nadeau, Claude",
+      "Bengio, Yoshua"
+    ],
+    "year": 2003,
+    "venue": "Machine Learning",
+    "volume": "52",
+    "issue": "3",
+    "pages": "239-281",
+    "doi": "10.1023/a:1024068626366",
+    "key": "nadeau2003",
+    "read_depth": "full",
+    "used_for": "corrected resampled t-test (variance factor 1/J + n2/n1)",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "title": "Interval Estimation for a Binomial Proportion",
+    "authors": [
+      "Brown, Lawrence D.",
+      "Cai, T. Tony",
+      "DasGupta, Anirban"
+    ],
+    "year": 2001,
+    "venue": "Statistical Science",
+    "volume": "16",
+    "issue": "2",
+    "pages": null,
+    "doi": "10.1214/ss/1009213286",
+    "key": "brown2001",
+    "read_depth": "abstract",
+    "used_for": "recommends the Wilson interval for small n",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "title": "Bootstrap confidence intervals",
+    "authors": [
+      "DiCiccio, Thomas J.",
+      "Efron, Bradley"
+    ],
+    "year": 1996,
+    "venue": "Statistical Science",
+    "volume": "11",
+    "issue": "3",
+    "pages": null,
+    "doi": "10.1214/ss/1032280214",
+    "key": "diciccio1996",
+    "read_depth": "abstract",
+    "used_for": "bootstrap confidence intervals",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "title": "Scikit-learn: Machine Learning in Python",
+    "authors": [
+      "Pedregosa, Fabian",
+      "Varoquaux, Gaël",
+      "Gramfort, Alexandre",
+      "Michel, Vincent",
+      "Thirion, Bertrand",
+      "Grisel, Olivier",
+      "Blondel, Mathieu",
+      "Müller, Andreas",
+      "Nothman, Joel",
+      "Louppe, Gilles",
+      "Prettenhofer, Peter",
+      "Weiss, Ron",
+      "Dubourg, Vincent",
+      "Vanderplas, Jake",
+      "Passos, Alexandre",
+      "Cournapeau, David",
+      "Brucher, Matthieu",
+      "Perrot, Matthieu",
+      "Duchesnay, Édouard"
+    ],
+    "year": 2011,
+    "venue": "Journal of Machine Learning Research",
+    "arxiv": "1201.0490",
+    "key": "pedregosa2011",
+    "read_depth": "full",
+    "used_for": "scikit-learn",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "title": "International application of a new probability algorithm for the diagnosis of coronary artery disease",
+    "authors": [
+      "Detrano, Robert",
+      "Janosi, Andras",
+      "Steinbrunn, Walter",
+      "Pfisterer, Matthias",
+      "Schmid, Johann-Jakob",
+      "Sandhu, Sarbjit",
+      "Guppy, Kern H.",
+      "Lee, Stella",
+      "Froelicher, Victor"
+    ],
+    "year": 1989,
+    "venue": "The American Journal of Cardiology",
+    "volume": "64",
+    "issue": "5",
+    "pages": "304-310",
+    "doi": "10.1016/0002-9149(89)90524-9",
+    "key": "detrano1989",
+    "read_depth": "abstract",
+    "used_for": "origin of the Cleveland heart data (303 patients) and its multi-site external testing",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "title": "Investigating for bias in healthcare algorithms: a sex-stratified analysis of supervised machine learning models in liver disease prediction",
+    "authors": [
+      "Straw, Isabel",
+      "Wu, Honghan"
+    ],
+    "year": 2022,
+    "venue": "BMJ Health &amp; Care Informatics",
+    "volume": "29",
+    "issue": "1",
+    "pages": "e100457",
+    "doi": "10.1136/bmjhci-2021-100457",
+    "key": "straw2022",
+    "read_depth": "full",
+    "used_for": "ILPD models show a sex disparity in false-negative rate",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "title": "Chronic kidney disease prediction based on machine learning algorithms",
+    "authors": [
+      "Islam, Md. Ariful",
+      "Majumder, Md. Ziaul Hasan",
+      "Hussein, Md. Alomgeer"
+    ],
+    "year": 2023,
+    "venue": "Journal of Pathology Informatics",
+    "volume": "14",
+    "issue": null,
+    "pages": "100189",
+    "doi": "10.1016/j.jpi.2023.100189",
+    "key": "islam2023",
+    "read_depth": "abstract",
+    "used_for": "CKD ML study: XGBoost accuracy 0.983 on the UCI CKD data",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "title": "Early heart disease prediction using feature engineering and machine learning algorithms",
+    "authors": [
+      "Bouqentar, Mohammed Amine",
+      "Terrada, Oumaima",
+      "Hamida, Soufiane",
+      "Saleh, Shawki",
+      "Lamrani, Driss",
+      "Cherradi, Bouchaib",
+      "Raihani, Abdelhadi"
+    ],
+    "year": 2024,
+    "venue": "Heliyon",
+    "volume": "10",
+    "issue": "19",
+    "pages": "e38731",
+    "doi": "10.1016/j.heliyon.2024.e38731",
+    "key": "bouqentar2024",
+    "read_depth": "abstract",
+    "used_for": "heart-disease ML with feature engineering on Cleveland/Statlog",
+    "preprint": false,
+    "verified_note": null
+  },
+  {
+    "key": "uci_heart",
+    "title": "Heart Disease",
+    "authors": [
+      "Janosi, Andras",
+      "Steinbrunn, William",
+      "Pfisterer, Matthias",
+      "Detrano, Robert"
+    ],
+    "year": 1989,
+    "venue": "UCI Machine Learning Repository",
+    "doi": "10.24432/C52P4X",
+    "read_depth": "full",
+    "used_for": "Cleveland heart data; citation as suggested by the UCI page (donated 1988-06-30)",
+    "preprint": false
+  },
+  {
+    "key": "uci_ckd",
+    "title": "Chronic Kidney Disease",
+    "authors": [
+      "Rubini, L.",
+      "Soundarapandian, P.",
+      "Eswaran, P."
+    ],
+    "year": 2015,
+    "venue": "UCI Machine Learning Repository",
+    "doi": "10.24432/C5G020",
+    "read_depth": "full",
+    "used_for": "CKD data (400 instances, missing values)",
+    "preprint": false
+  },
+  {
+    "key": "uci_ilpd",
+    "title": "ILPD (Indian Liver Patient Dataset)",
+    "authors": [
+      "Ramana, Bendi",
+      "Venkateswarlu, N."
+    ],
+    "year": 2022,
+    "venue": "UCI Machine Learning Repository",
+    "doi": "10.24432/C5D02C",
+    "read_depth": "full",
+    "used_for": "ILPD (583 instances); citation year as suggested by the UCI page (donated 2012-05-20)",
+    "preprint": false
+  },
+  {
+    "key": "ehrsmall2026",
+    "verified_note": "Not in Crossref/OpenAlex/arXiv; confirmed via Europe PMC record PMC13274287 (title, authors, AMIA Jt Summits proceedings, 2026, pp. 604-613), 2026-09-21",
+    "title": "Large Models for Small Tables: Adapting Tabular Foundation Models to EHR Data",
+    "authors": [
+      "Zhu, R.",
+      "Zhou, X.",
+      "Liang, I.",
+      "Scherer, S. W.",
+      "Xu, K.",
+      "Ohno-Machado, L."
+    ],
+    "year": 2026,
+    "venue": "AMIA Joint Summits on Translational Science Proceedings",
+    "pages": "604-613",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13274287/",
+    "read_depth": "abstract",
+    "used_for": "fine-tuned TabPFN reported to consistently outperform conventional methods on clinical prediction tasks (abstract only; no baselines or dataset count claimed)",
+    "preprint": false
+  },
+  {
+    "key": "smith1988",
+    "verified_note": "OpenAlex title match resolves to the PMC copy (PMC2245318); citation details as listed in the dataset documentation",
+    "title": "Using the ADAP learning algorithm to forecast the onset of diabetes mellitus",
+    "authors": [
+      "Smith, J. W.",
+      "Everhart, J. E.",
+      "Dickson, W. C.",
+      "Knowler, W. C.",
+      "Johannes, R. S."
+    ],
+    "year": 1988,
+    "venue": "Proc. Symposium on Computer Applications and Medical Care",
+    "pages": "261-265",
+    "read_depth": "metadata",
+    "used_for": "listed as the past-usage study in the Pima dataset documentation (details taken from that documentation)",
+    "preprint": false
+  },
+  {
+    "key": "pima_docs",
+    "verified_note": "Documentation file fetched and read 2026-09-21; not a scholarly work, so not indexed",
+    "title": "Pima Indians Diabetes Database: dataset documentation (pima-indians-diabetes.names)",
+    "authors": [
+      "National Institute of Diabetes and Digestive and Kidney Diseases"
+    ],
+    "year": 1990,
+    "venue": "mirrored at github.com/jbrownlee/Datasets",
+    "url": "https://raw.githubusercontent.com/jbrownlee/Datasets/master/pima-indians-diabetes.names",
+    "read_depth": "full",
+    "used_for": "Pima population (female, >=21, Pima heritage), 768 instances",
+    "preprint": false
+  }
+]

@@ -1,0 +1,580 @@
+{
+  "preprocessing": {
+    "n_comparisons": 44,
+    "n_with_p": 40,
+    "n_p_lt_0.05": 0,
+    "min_p": 0.2053832666161652,
+    "max_abs_diff": 0.005621010948054968,
+    "leaky_max_abs_diff": 0.0015241811368731152,
+    "leaky_signed": [
+      -0.0001,
+      0.0,
+      0.0002,
+      -0.0002,
+      -0.0001,
+      -0.0002,
+      0.0015,
+      -0.0003
+    ],
+    "per_variant": {
+      "no winsorization": {
+        "n_pairs": 8,
+        "min_diff": -0.0021,
+        "max_diff": 0.0011,
+        "min_p": 0.524
+      },
+      "no engineered features": {
+        "n_pairs": 8,
+        "min_diff": -0.0053,
+        "max_diff": 0.0018,
+        "min_p": 0.205
+      },
+      "mean imputation": {
+        "n_pairs": 8,
+        "min_diff": -0.0035,
+        "max_diff": 0.0009,
+        "min_p": 0.437
+      },
+      "kNN imputation (k=5)": {
+        "n_pairs": 8,
+        "min_diff": -0.0022,
+        "max_diff": 0.0025,
+        "min_p": 0.259
+      },
+      "native missing values (no imputation)": {
+        "n_pairs": 4,
+        "min_diff": -0.0056,
+        "max_diff": 0.0006,
+        "min_p": 0.363
+      },
+      "LEAKY: preprocessing fit on train+test": {
+        "n_pairs": 8,
+        "min_diff": -0.0003,
+        "max_diff": 0.0015,
+        "min_p": 0.512
+      }
+    }
+  },
+  "threshold": {
+    "youden_vs_fixed_p<0.05": [
+      {
+        "disease": "liver",
+        "model": "hgb",
+        "diff": 0.0855,
+        "p": 0.0022
+      },
+      {
+        "disease": "liver",
+        "model": "logreg",
+        "diff": 0.0963,
+        "p": 0.0011
+      }
+    ],
+    "youden_vs_prevalence_min_p": 0.33514930634452256,
+    "youden_vs_prevalence_max_abs_diff": 0.009183601891935218,
+    "youden_vs_F1opt_p<0.05": [
+      {
+        "disease": "liver",
+        "model": "hgb",
+        "diff": 0.1611,
+        "p": 0.0
+      },
+      {
+        "disease": "liver",
+        "model": "logreg",
+        "diff": 0.1823,
+        "p": 0.0
+      }
+    ],
+    "liver_F1optimal_mean_specificity": {
+      "hgb": 0.028535353535353532,
+      "logreg": 0.01818181818181818,
+      "tabpfn": 0.012121212121212121
+    }
+  },
+  "uncertainty": {
+    "band_coverage_range": [
+      0.9001782531194297,
+      0.92
+    ],
+    "cvplus_coverage_range": [
+      0.8984409925586395,
+      0.9286549707602341
+    ],
+    "max_abs_cov_diff_cvplus_minus_band": 0.011695906432748648,
+    "band_identical_to_label_set_in_all_pairs": true,
+    "n_pairs": 8,
+    "singleton_range": [
+      0.5263157894736842,
+      0.92
+    ],
+    "both_labels_range": [
+      0.0,
+      0.4736842105263159
+    ],
+    "empty_max": 0.08166666666666669,
+    "tuned_baseline_coverage_note": "see tables.md coverage table"
+  },
+  "novelty": {
+    "cv_flag_rate_range_by_detector": {
+      "Isolation Forest": [
+        0.03,
+        0.048
+      ],
+      "Local Outlier Factor": [
+        0.02,
+        0.028
+      ],
+      "Mahalanobis + Ledoit-Wolf (project)": [
+        0.03,
+        0.036
+      ],
+      "Mahalanobis, empirical covariance": [
+        0.03,
+        0.087
+      ],
+      "One-class SVM": [
+        0.108,
+        0.237
+      ],
+      "kNN distance (k=5)": [
+        0.02,
+        0.04
+      ]
+    },
+    "query_us_range_by_detector": {
+      "Isolation Forest": [
+        1543.9,
+        1552.4
+      ],
+      "Local Outlier Factor": [
+        184.7,
+        512.1
+      ],
+      "Mahalanobis + Ledoit-Wolf (project)": [
+        9.0,
+        14.2
+      ],
+      "Mahalanobis, empirical covariance": [
+        8.3,
+        13.0
+      ],
+      "One-class SVM": [
+        91.6,
+        102.3
+      ],
+      "kNN distance (k=5)": [
+        154.7,
+        457.6
+      ]
+    },
+    "shift_auroc_by_detector": {
+      "Isolation Forest": {
+        "ckd": 0.637,
+        "diabetes": 0.814,
+        "heart": 0.75,
+        "liver": 0.601
+      },
+      "Local Outlier Factor": {
+        "ckd": 0.679,
+        "diabetes": 0.951,
+        "heart": 0.827,
+        "liver": 0.809
+      },
+      "Mahalanobis + Ledoit-Wolf (project)": {
+        "ckd": 0.638,
+        "diabetes": 0.946,
+        "heart": 0.888,
+        "liver": 0.909
+      },
+      "Mahalanobis, empirical covariance": {
+        "ckd": 0.672,
+        "diabetes": 0.936,
+        "heart": 0.888,
+        "liver": 0.798
+      },
+      "One-class SVM": {
+        "ckd": 0.68,
+        "diabetes": 0.968,
+        "heart": 0.899,
+        "liver": 0.951
+      },
+      "kNN distance (k=5)": {
+        "ckd": 0.685,
+        "diabetes": 0.906,
+        "heart": 0.843,
+        "liver": 0.798
+      }
+    },
+    "shift_auroc_rank_of_project": {
+      "ckd": 5,
+      "diabetes": 3,
+      "heart": 3,
+      "liver": 2
+    }
+  },
+  "baselines": {
+    "best_auc_model_by_disease": {
+      "ckd": "svm",
+      "diabetes": "rf",
+      "heart": "logreg",
+      "liver": "logreg"
+    },
+    "logreg_minus_hgb_auc": {
+      "ckd": 0.0003,
+      "diabetes": 0.0084,
+      "heart": 0.0078,
+      "liver": 0.0218
+    },
+    "seconds_per_fold_range_by_model": {
+      "hgb": [
+        6.47,
+        10.34
+      ],
+      "logreg": [
+        0.05,
+        0.05
+      ],
+      "rf": [
+        1.37,
+        1.82
+      ],
+      "svm": [
+        0.05,
+        0.2
+      ]
+    }
+  },
+  "tabpfn": {
+    "cv_auc": {
+      "heart": 0.9184,
+      "diabetes": 0.8435,
+      "ckd": 1.0,
+      "liver": 0.741
+    },
+    "cv_best_of_all": [
+      "heart",
+      "diabetes",
+      "ckd"
+    ],
+    "seconds_per_fold_range": [
+      1.04,
+      1.83
+    ],
+    "pairwise_vs_baselines_raw": [
+      {
+        "disease": "heart",
+        "vs": "hgb",
+        "diff": 0.017,
+        "p": 0.10430836244321315
+      },
+      {
+        "disease": "heart",
+        "vs": "logreg",
+        "diff": 0.0092,
+        "p": 0.1448778906044989
+      },
+      {
+        "disease": "heart",
+        "vs": "rf",
+        "diff": 0.0146,
+        "p": 0.07101681527258001
+      },
+      {
+        "disease": "heart",
+        "vs": "svm",
+        "diff": 0.0222,
+        "p": 0.02913927324063849
+      },
+      {
+        "disease": "diabetes",
+        "vs": "hgb",
+        "diff": 0.0125,
+        "p": 0.04714038076702965
+      },
+      {
+        "disease": "diabetes",
+        "vs": "logreg",
+        "diff": 0.0041,
+        "p": 0.3961868990487123
+      },
+      {
+        "disease": "diabetes",
+        "vs": "rf",
+        "diff": 0.0039,
+        "p": 0.37771757598324157
+      },
+      {
+        "disease": "diabetes",
+        "vs": "svm",
+        "diff": 0.0169,
+        "p": 0.006975866000756034
+      },
+      {
+        "disease": "ckd",
+        "vs": "hgb",
+        "diff": 0.0004,
+        "p": 0.4138835804697158
+      },
+      {
+        "disease": "ckd",
+        "vs": "logreg",
+        "diff": 0.0,
+        "p": 0.6533976653313034
+      },
+      {
+        "disease": "ckd",
+        "vs": "rf",
+        "diff": 0.0,
+        "p": 0.6533976653312461
+      },
+      {
+        "disease": "ckd",
+        "vs": "svm",
+        "diff": 0.0,
+        "p": null
+      },
+      {
+        "disease": "liver",
+        "vs": "hgb",
+        "diff": 0.0189,
+        "p": 0.06820488938434997
+      },
+      {
+        "disease": "liver",
+        "vs": "logreg",
+        "diff": -0.0029,
+        "p": 0.7343200115416592
+      },
+      {
+        "disease": "liver",
+        "vs": "rf",
+        "diff": 0.0071,
+        "p": 0.4983764481049789
+      },
+      {
+        "disease": "liver",
+        "vs": "svm",
+        "diff": 0.0813,
+        "p": 0.00010204918860487286
+      }
+    ],
+    "preproc_per_variant": {
+      "no winsorization": {
+        "n_pairs": 4,
+        "min_diff": -0.0017,
+        "max_diff": 0.0041,
+        "min_p": 0.264
+      },
+      "no engineered features": {
+        "n_pairs": 4,
+        "min_diff": -0.0013,
+        "max_diff": 0.0031,
+        "min_p": 0.444
+      },
+      "mean imputation": {
+        "n_pairs": 4,
+        "min_diff": -0.0022,
+        "max_diff": 0.0006,
+        "min_p": 0.338
+      },
+      "kNN imputation (k=5)": {
+        "n_pairs": 4,
+        "min_diff": -0.0039,
+        "max_diff": 0.001,
+        "min_p": 0.1
+      },
+      "native missing values (no imputation)": {
+        "n_pairs": 4,
+        "min_diff": -0.0006,
+        "max_diff": 0.0003,
+        "min_p": 0.704
+      },
+      "LEAKY: preprocessing fit on train+test": {
+        "n_pairs": 4,
+        "min_diff": -0.0001,
+        "max_diff": 0.0012,
+        "min_p": 0.184
+      }
+    },
+    "preproc_max_abs_diff": 0.0041,
+    "preproc_min_p": 0.1,
+    "threshold_vs_fixed": [
+      {
+        "disease": "ckd",
+        "vs": "fixed 0.5",
+        "diff": -0.004,
+        "p": 0.33750185654036463
+      },
+      {
+        "disease": "diabetes",
+        "vs": "fixed 0.5",
+        "diff": 0.0442,
+        "p": 0.14687039353799125
+      },
+      {
+        "disease": "heart",
+        "vs": "fixed 0.5",
+        "diff": -0.0185,
+        "p": 0.2292503450036143
+      },
+      {
+        "disease": "liver",
+        "vs": "fixed 0.5",
+        "diff": 0.1213,
+        "p": 0.0004502177444098175
+      }
+    ],
+    "threshold_vs_F1opt": [
+      {
+        "disease": "ckd",
+        "vs": "F1-optimal",
+        "diff": -0.0007,
+        "p": 0.9317594582755363
+      },
+      {
+        "disease": "diabetes",
+        "vs": "F1-optimal",
+        "diff": -0.0048,
+        "p": 0.6344614250378227
+      },
+      {
+        "disease": "heart",
+        "vs": "F1-optimal",
+        "diff": -0.0061,
+        "p": 0.33750185654036463
+      },
+      {
+        "disease": "liver",
+        "vs": "F1-optimal",
+        "diff": 0.1709,
+        "p": 0.00434216174705984
+      }
+    ],
+    "threshold_vs_prevalence": [
+      {
+        "disease": "ckd",
+        "vs": "training prevalence",
+        "diff": -0.004,
+        "p": 0.33750185654036463
+      },
+      {
+        "disease": "diabetes",
+        "vs": "training prevalence",
+        "diff": -0.0067,
+        "p": 0.3963883045406337
+      },
+      {
+        "disease": "heart",
+        "vs": "training prevalence",
+        "diff": -0.0176,
+        "p": 0.22584089771784904
+      },
+      {
+        "disease": "liver",
+        "vs": "training prevalence",
+        "diff": -0.0069,
+        "p": 0.6692302689286116
+      }
+    ],
+    "band_coverage_range": [
+      0.9008743169398906,
+      0.93
+    ],
+    "band_identical_to_label_set_in_all_pairs": true,
+    "max_abs_cov_diff_cvplus_minus_band": 0.01750000000000007,
+    "ckd_band_width": 0.0009302201448008418,
+    "ckd_band_coverage": 0.93,
+    "singleton_range": [
+      0.5666666666666667,
+      0.93
+    ],
+    "shap": {
+      "ckd": {
+        "predict_ms": 902.1,
+        "bg10_median": 18.71,
+        "bg25_median": 24.42,
+        "spearman_mean": 0.915,
+        "spearman_min": 0.836,
+        "top3_mean": 1.95,
+        "top3_min": 0,
+        "kernel_median": 38.1,
+        "kernel_spearman": 0.816
+      },
+      "diabetes": {
+        "predict_ms": 1166.7,
+        "bg10_median": 15.77,
+        "bg25_median": 37.44,
+        "spearman_mean": 0.93,
+        "spearman_min": 0.673,
+        "top3_mean": 2.75,
+        "top3_min": 2,
+        "kernel_median": 16.95,
+        "kernel_spearman": 0.928
+      },
+      "heart": {
+        "predict_ms": 701.8,
+        "bg10_median": 17.99,
+        "bg25_median": 27.04,
+        "spearman_mean": 0.965,
+        "spearman_min": 0.918,
+        "top3_mean": 2.7,
+        "top3_min": 2,
+        "kernel_median": 34.05,
+        "kernel_spearman": 0.912
+      },
+      "liver": {
+        "predict_ms": 897.8,
+        "bg10_median": 25.86,
+        "bg25_median": 33.92,
+        "spearman_mean": 0.955,
+        "spearman_min": 0.846,
+        "top3_mean": 2.8,
+        "top3_min": 2,
+        "kernel_median": 29.63,
+        "kernel_spearman": 0.96
+      }
+    },
+    "shap_speedup_range": [
+      1.5,
+      2.37,
+      1.31,
+      1.31
+    ],
+    "shap_predict_ms_range": [
+      701.8,
+      1166.7
+    ],
+    "shap_kernel_slower_than_bg25_everywhere": false,
+    "latency_single_vs_batched": {
+      "ckd": {
+        "single_ms": 880.2,
+        "batched_ms_per_row": 46.0,
+        "speedup": 19.1
+      },
+      "diabetes": {
+        "single_ms": 1144.1,
+        "batched_ms_per_row": 58.6,
+        "speedup": 19.5
+      },
+      "heart": {
+        "single_ms": 581.0,
+        "batched_ms_per_row": 31.7,
+        "speedup": 18.3
+      },
+      "liver": {
+        "single_ms": 888.6,
+        "batched_ms_per_row": 46.3,
+        "speedup": 19.2
+      }
+    },
+    "latency_speedup_range": [
+      18.3,
+      19.5
+    ],
+    "latency_single_ms_range": [
+      581.0,
+      1144.1
+    ]
+  }
+}
