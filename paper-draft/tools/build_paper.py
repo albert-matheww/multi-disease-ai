@@ -101,22 +101,33 @@ def table_tex(caption: str, label: str, rows: list[list[str]]) -> str:
     return "\n".join(lines)
 
 
+_ORDINAL_SUFFIX = {1: "st", 2: "nd", 3: "rd"}
+
+
+def _ordinal_tex(n: int) -> str:
+    """`n` as IEEEtran conference templates spell it: e.g. ``1\\textsuperscript{st}``."""
+    suffix = "th" if 11 <= n % 100 <= 13 else _ORDINAL_SUFFIX.get(n % 10, "th")
+    return rf"{n}\textsuperscript{{{suffix}}}"
+
+
 def build_authors() -> str:
-    """Parse the `AUTHORS:` block (one `- Name | role/id line | affiliation` per person) into an
-    IEEEtran multi-author \\author{} block, each person getting their own name/affiliation pair
-    joined by \\and, matching how IEEEtran lays out author columns."""
+    """Parse the `AUTHORS:` block (one `- Name | role/id | institution | city, country` per
+    person) into the standard IEEE-conference-template multi-author \\author{} block: each person
+    gets an ordinal-numbered \\IEEEauthorblockN and an \\IEEEauthorblockA with role/id, institution
+    and city/country on their own lines, joined by \\and (IEEEtran's own author-column layout)."""
     m = re.search(r"^AUTHORS:\n((?:- .*\n?)+)", SRC, re.M)
     people = []
     for line in m.group(1).strip().splitlines():
         parts = [p.strip() for p in line.lstrip("- ").split("|")]
-        name, role, affil = (parts + ["", ""])[:3]
-        people.append((name, role, affil))
+        name, role, inst, place = (parts + ["", "", ""])[:4]
+        people.append((name, role, inst, place))
     blocks = []
-    for name, role, affil in people:
-        role_line = rf"\textit{{{inline(role)}}} \\ " if role else ""
+    for i, (name, role, inst, place) in enumerate(people, start=1):
+        lines = [inline(part) for part in (role, inst, place) if part]
+        addr = r" \\ ".join(rf"\textit{{{ln}}}" if j == 0 and role else ln for j, ln in enumerate(lines))
         blocks.append(
-            rf"\IEEEauthorblockN{{{inline(name)}}}"
-            rf"\IEEEauthorblockA{{{role_line}{inline(affil)}}}"
+            rf"\IEEEauthorblockN{{{_ordinal_tex(i)} {inline(name)}}}"
+            rf"\IEEEauthorblockA{{{addr}}}"
         )
     return "\\and\n".join(blocks)
 

@@ -6,11 +6,11 @@
 
 \newcommand{\pending}[1]{\textbf{\textcolor{red}{[PENDING#1]}}}
 
-\title{MultiDiseaseAI: A Leakage-Safe Serving Pipeline Around a Tabular Foundation Model, and What Each Design Choice Buys on Four Small Clinical Datasets}
+\title{MultiDiseaseAI: Evaluating TabPFN-Based Design Choices for Multi-Disease Clinical Risk Prediction}
 
-\author{\IEEEauthorblockN{Albert Mathew Suni}\IEEEauthorblockA{\textit{Reg. No. 23BCE1765} \\ Vellore Institute of Technology, Chennai, India}\and
-\IEEEauthorblockN{Nandhitha S H}\IEEEauthorblockA{\textit{Reg. No. 23BCE1552} \\ Vellore Institute of Technology, Chennai, India}\and
-\IEEEauthorblockN{Dr. Vijayraj J}\IEEEauthorblockA{\textit{Project Guide, Employee ID 54799} \\ Vellore Institute of Technology, Chennai, India}}
+\author{\IEEEauthorblockN{1\textsuperscript{st} Albert Mathew Suni}\IEEEauthorblockA{\textit{Reg. No. 23BCE1765} \\ Vellore Institute of Technology \\ Chennai, India}\and
+\IEEEauthorblockN{2\textsuperscript{nd} Nandhitha S H}\IEEEauthorblockA{\textit{Reg. No. 23BCE1552} \\ Vellore Institute of Technology \\ Chennai, India}\and
+\IEEEauthorblockN{3\textsuperscript{rd} Dr. Vijayraj J}\IEEEauthorblockA{\textit{Project Guide, Employee ID 54799} \\ Vellore Institute of Technology \\ Chennai, India}}
 
 \begin{document}
 
@@ -66,7 +66,7 @@ Fig. 1 shows the pipeline. Everything the model needs at serving time is in one 
 
 \textbf{Data and preprocessing.} A configuration file registers each disease's columns, target and form fields, so adding a disease means adding an entry. The order is deterministic cleaning, one stratified 80/20 split (seed 42), median or most-frequent imputation, 1.5$\times$IQR winsorization, ordinal encoding and feature engineering. Every fitted statistic comes from the training split, a unit test checks the winsorization bounds against the imputed training split, and a saved artifact replays the identical transform on a live record. The engineered features are the rate-pressure product, heart-rate reserve and cholesterol/age (heart); glucose$\times$BMI and insulin/glucose (diabetes); a comorbidity count (kidney); and AST/ALT and direct/total bilirubin (liver).
 
-\textbf{Model.} Each disease gets \texttt{TabPFNClassifier(n\_estimators=8, random\_state=42)} on CPU with categorical column indices, package version 8.2.0, and no hyperparameter search. TabPFN is the only classifier in the shipped system.
+\textbf{Model.} Each disease gets a \texttt{TabPFNClassifier} with \texttt{n\_estimators=8} and \texttt{random\_state=42} on CPU with categorical column indices, package version 8.2.0, and no hyperparameter search. TabPFN is the only classifier in the shipped system.
 
 \textbf{Precomputed add-ons.} A stratified five-fold out-of-fold pass over the training split (folds capped at the smaller class) yields three artifacts.
 

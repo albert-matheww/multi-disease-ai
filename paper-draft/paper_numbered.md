@@ -1,8 +1,8 @@
-TITLE: MultiDiseaseAI: A Leakage-Safe Serving Pipeline Around a Tabular Foundation Model, and What Each Design Choice Buys on Four Small Clinical Datasets
+TITLE: MultiDiseaseAI: Evaluating TabPFN-Based Design Choices for Multi-Disease Clinical Risk Prediction
 AUTHORS:
-- Albert Mathew Suni | Reg. No. 23BCE1765 | Vellore Institute of Technology, Chennai, India
-- Nandhitha S H | Reg. No. 23BCE1552 | Vellore Institute of Technology, Chennai, India
-- Dr. Vijayraj J | Project Guide, Employee ID 54799 | Vellore Institute of Technology, Chennai, India
+- Albert Mathew Suni | Reg. No. 23BCE1765 | Vellore Institute of Technology | Chennai, India
+- Nandhitha S H | Reg. No. 23BCE1552 | Vellore Institute of Technology | Chennai, India
+- Dr. Vijayraj J | Project Guide, Employee ID 54799 | Vellore Institute of Technology | Chennai, India
 
 ABSTRACT:
 A tabular foundation model such as TabPFN can serve a classifier for a small clinical table without hyperparameter search, but a usable system also needs preprocessing, a decision rule, an uncertainty statement, a novelty warning and explanations. We describe MultiDiseaseAI, a pipeline wrapping one TabPFN model per disease (heart, diabetes, kidney, liver disease; 303–768 patients) in a leakage-safe, replayable transform and three cheap add-ons: an out-of-fold residual band, a Youden threshold and a Ledoit–Wolf Mahalanobis novelty flag. We tested each choice, including TabPFN itself, against four reference models under a paired, corrected resampling protocol. TabPFN reached the highest or joint-highest cross-validated AUC on three of four tasks with no tuning, significantly ahead only of the weaker baselines (an SVM, on three tasks; boosting, on one), not of logistic regression or random forest. Sixty-eight preprocessing comparisons, including TabPFN's own, found no significant difference from the shipped pipeline; fitting on train-plus-test data moved AUC by at most 0.0015. The learned threshold beat a fixed 0.5 cutoff only on the imbalanced liver task (p ≤ 0.002) and never beat a simple prevalence rule. For every model the band is exactly a conformal label set: 0.90 to 0.93 coverage at a nominal 0.90, within 0.018 of CV+, at 0.5 µs per query, collapsing to near zero on the one near-separable task. The novelty flag held its nominal rate at 9 to 14 µs per row, though a one-class SVM caught an age shift better. Cutting the SHAP background from 25 to 10 rows, unbenchmarked before this work, saved 1.3 to 2.4× with high rank agreement; KernelSHAP was not uniformly slower, against a cited finding. The evidence supports calling these choices cheap and competitive, and TabPFN a defensible default rather than a proven best.
@@ -41,7 +41,7 @@ Fig. 1 shows the pipeline. Everything the model needs at serving time is in one 
 
 **Data and preprocessing.** A configuration file registers each disease's columns, target and form fields, so adding a disease means adding an entry. The order is deterministic cleaning, one stratified 80/20 split (seed 42), median or most-frequent imputation, 1.5×IQR winsorization, ordinal encoding and feature engineering. Every fitted statistic comes from the training split, a unit test checks the winsorization bounds against the imputed training split, and a saved artifact replays the identical transform on a live record. The engineered features are the rate-pressure product, heart-rate reserve and cholesterol/age (heart); glucose×BMI and insulin/glucose (diabetes); a comorbidity count (kidney); and AST/ALT and direct/total bilirubin (liver).
 
-**Model.** Each disease gets `TabPFNClassifier(n_estimators=8, random_state=42)` on CPU with categorical column indices, package version 8.2.0, and no hyperparameter search. TabPFN is the only classifier in the shipped system.
+**Model.** Each disease gets a `TabPFNClassifier` with `n_estimators=8` and `random_state=42` on CPU with categorical column indices, package version 8.2.0, and no hyperparameter search. TabPFN is the only classifier in the shipped system.
 
 **Precomputed add-ons.** A stratified five-fold out-of-fold pass over the training split (folds capped at the smaller class) yields three artifacts.
 
