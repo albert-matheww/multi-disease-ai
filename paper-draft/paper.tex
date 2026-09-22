@@ -291,6 +291,16 @@ Liver & most novel & 1 & 0.741 & [0.083, 1.000] & \textbf{No Liver Disease (wron
 \end{tabular}}
 \end{table}
 
+\subsection{Live implementation}
+
+The three preceding sections describe a serving path (Section III); Fig. 3 and Fig. 4 show it running locally, not mocked up, against the trained TabPFN bundle. Fig. 3 (top) is the input form for the heart-disease worked example above (Table IX, row 1), entered field-for-field into the deployed Streamlit app; Fig. 3 (bottom) is the app's own result panel for that submission --- probability 97.1\%, band 31\%-100\%, label ``Heart Disease Present'', a novelty warning (``unlike \textasciitilde{}100\% of the training cohort''), and a live SHAP bar chart topped by \texttt{ca} and \texttt{cp}. The probability, band and label match Table IX exactly, because they are the same model bundle scoring the same row; the SHAP values do not match exactly (app: ca +0.136, cp +0.095, thalach +0.054; Table IX's harness run: ca +0.139, cp +0.086, thalach +0.055) because the interactive path does not fix a random seed before sampling the k-means background (unlike the timing harness in Section V-F, which seeds every call for reproducibility) --- a gap in the shipped code this comparison surfaced. Both runs agree on the two dominant features and their sign.
+
+Fig. 4 is the app's own ``Model Performance'' page for heart disease, reading directly from the same fixed-split artifact behind Table II: accuracy 88.5\%, F1 88.1\% and AUC 0.959 at the default 0.5 cutoff, with a second line for the learned threshold (t = 0.56: accuracy 88.5\%, precision 86.2\%, recall 89.3\%, F1 87.7\%) --- every one of these numbers reproduces a cell already in Table II or \texttt{results/tables.md}. The confusion matrix (28 true negatives, 5 false positives, 2 false negatives, 26 true positives out of n = 61) sums to the paper's own heart test-set size and accuracy exactly.
+
+\begin{figure}[!t]\centering\includegraphics[width=\columnwidth]{figures/fig3_ui_prediction.png}\caption{Live app: the heart-disease input form filled with the Table IX ``most novel'' patient (top), and the app's own result panel for that submission --- prediction, confidence, risk level, novelty warning, gauge and SHAP chart (bottom). Captured 2026-09-23 from the Streamlit app running locally against the trained TabPFN bundle.}\label{fig:ui-prediction}\end{figure}
+
+\begin{figure}[!t]\centering\includegraphics[width=\columnwidth]{figures/fig4_ui_performance.png}\caption{Live app: the ``Model Performance'' page for heart disease, reading the same fixed-split evaluation behind Table II (accuracy, precision, recall, F1, AUC at both the default and learned thresholds; confusion matrix; ROC and precision-recall curves).}\label{fig:ui-performance}\end{figure}
+
 \section{Discussion}
 
 Table X sets each choice beside the alternatives tested and the verdict the evidence allows.

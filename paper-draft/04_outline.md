@@ -1,5 +1,11 @@
 # 04 - Outline (IEEE conference, ~4,000 words body; body = Sections I-IX text, excluding abstract, table/figure contents, captions, references)
 
+> **Later update (2026-09-23):** this is the Stage-4 planning outline, written before the TabPFN run.
+> The delivered paper added a Table III (TabPFN vs. each reference model), widened Tables IV-VI to
+> three models, added Table VIII (SHAP) and Table IX (worked examples), renumbered the verdict table
+> to Table X, and added a Section V-G with two implementation screenshots (Fig. 3, Fig. 4). Final body
+> is 5,080 words against the ~4,000 target (+27%); see `audit_report.md` Open Items for why.
+
 Contribution framing (system + empirical characterisation; not a new algorithm): a leakage-safe,
 replayable serving pipeline around off-the-shelf TabPFN for small clinical tables, and a
 head-to-head measurement of each design choice against its natural alternative.

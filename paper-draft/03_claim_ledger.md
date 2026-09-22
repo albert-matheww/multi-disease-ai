@@ -50,6 +50,14 @@ Reference models: L2 logistic regression (standardised), histogram gradient boos
 | R18 | V-E | Query time per row: Mahalanobis+LW 9-14 us; OCSVM 92-102 us; LOF 185-512 us; kNN 155-458 us; IF 1544-1552 us; Ledoit-Wolf beats empirical covariance on liver (AUROC 0.909 vs 0.798) and CKD flag rate (0.030 vs 0.087) | RESULT | same | ok |
 | R19 | V-E | Heart, age <= median vs > median (held-out): project flag rate 0.061 vs 0.574 | RESULT | `tables.md` novelty | ok |
 
+## Live implementation (Sec. V-G, added 2026-09-23)
+
+| id | section | claim | evidence | status |
+|---|---|---|---|---|
+| L1 | V-G | Fig. 3: the heart-disease form filled with Table IX's "most novel" row, and the app's live result panel for that submission (probability 97.1%, band 31-100%, label, novelty warning, SHAP chart), captured from the Streamlit app running locally against the real trained bundle | `paper-draft/experiments/capture_screenshots.py` (Playwright, headless Chromium) -> `figures/screenshots/02_filled_form.png`, `04_shap_contributions.png`; composited into `figures/fig3_ui_prediction.png` | ok |
+| L2 | V-G | The live SHAP values (ca +0.136, cp +0.095, thalach +0.054) differ from Table IX's harness values (ca +0.139, cp +0.086, thalach +0.055) because the interactive serving path (`src/prediction.py`, `_INTERACTIVE_SHAP_BACKGROUND=10`) does not seed its k-means background sample, unlike the timing harness (`run_experiments.py stage_shap`, seeds every call) | re-read `src/prediction.py`, `src/explainability.py`; both runs' raw values compared by hand | ok (real, disclosed as a shipped-code gap, not hidden) |
+| L3 | V-G | Fig. 4: the app's "Model Performance" page for heart disease reproduces Table II's fixed-split numbers exactly (accuracy 88.5%, F1 88.1%, AUC 0.959; at t=0.56: accuracy 88.5%, precision 86.2%, recall 89.3%, F1 87.7%; confusion matrix 28/5/2/26, n=61) | `reports/heart_metrics.json` (same file the app reads); cross-checked against `results/tables.md` heart-tabpfn row | ok |
+
 ## Results that needed TabPFN (unblocked 2026-09-22: user obtained a `TABPFN_TOKEN` from ux.priorlabs.ai and accepted the TabPFN-3 non-commercial licence themselves in the browser; token stored only in the untracked local `.env`)
 
 | id | section | claim | evidence path | status |

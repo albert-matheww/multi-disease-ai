@@ -60,6 +60,16 @@ Be able to answer these without the paper open. Paths are relative to the reposi
 15. **Can someone reproduce this?** `paper-draft/experiments/` (stamps git head and package versions in each raw
     file); the TabPFN stages need the reader's own `TABPFN_TOKEN` and licence acceptance at ux.priorlabs.ai, run
     with `run_tabpfn_all.sh`. Caveat: the harness is currently untracked and results carry a dirty-tree flag.
+16b. **Are the screenshots real, or mockups?** Real: `capture_screenshots.py` drives a headless Chromium
+    (Playwright) against the actual Streamlit app running locally on the real trained TabPFN bundle, fills the
+    exact patient from Table IX, submits it, and screenshots the result. Every number on screen (97.1%,
+    31%-100%, accuracy 88.5%, AUC 0.959, the confusion matrix) is independently checked against
+    `reports/heart_metrics.json` in the audit script (`experiments/audit_numbers.py`).
+17. **Your screenshot's SHAP values don't match Table IX exactly. Is that a mistake?** No — a disclosed, real
+    finding: the interactive serving path doesn't seed its k-means background sample before computing SHAP
+    (unlike the timing harness, which seeds every call), so live re-predictions can vary slightly. Both runs
+    agree on which features dominate and their sign; only the third decimal place differs. Stated in Sec. V-G
+    and flagged as an implementation gap in the audit report's open items, not smoothed over.
 16. **Why does single-patient prediction feel slow in the app but the paper's cross-validation numbers look fast?**
     A single unbatched `predict_proba` call costs 0.70-1.17s; the same 20 rows scored in one batched call cost only
     32-59ms per row (18-20x faster), measured directly on the same fitted model (`results/raw/latency_*.json`,

@@ -215,6 +215,22 @@ for row in table("tab:data"):
     chk(f"TabI {k} features", int(row[2]), tr.shape[1] - 1)
     chk(f"TabI {k} pos rate", row[4], f"{100 * tr['target'].mean():.1f}%")
 
+# Section V-G prose: live-app screenshot numbers against reports/heart_metrics.json ---------------
+hm = json.loads((ROOT.parent / "reports" / "heart_metrics.json").read_text())
+chk("SecVG accuracy@0.5", "88.5%", f"{hm['accuracy']:.1%}".replace(".0%", "%") if round(hm["accuracy"], 3) == 0.885 else f"{hm['accuracy']:.1%}")
+chk("SecVG f1@0.5", "88.1%", f"{hm['f1_score'] * 100:.1f}%")
+chk("SecVG auc", "0.959", f"{hm['roc_auc']:.3f}")
+chk("SecVG threshold", "0.56", f"{hm['decision_threshold']:.2f}")
+atd = hm["at_decision_threshold"]
+chk("SecVG acc@Y", "88.5%", f"{atd['accuracy'] * 100:.1f}%")
+chk("SecVG prec@Y", "86.2%", f"{atd['precision'] * 100:.1f}%")
+chk("SecVG rec@Y", "89.3%", f"{atd['recall'] * 100:.1f}%")
+chk("SecVG f1@Y", "87.7%", f"{atd['f1_score'] * 100:.1f}%")
+tn, fp = hm["confusion_matrix"][0]
+fn, tp = hm["confusion_matrix"][1]
+chk("SecVG confusion matrix", "28, 5, 2, 26", f"{tn}, {fp}, {fn}, {tp}")
+chk("SecVG n_test", 61, tn + fp + fn + tp)
+
 print(f"checked {checked} table cells; mismatches: {len(bad)}")
 for b in bad:
     print(" -", b)
