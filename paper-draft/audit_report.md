@@ -34,9 +34,11 @@ headless Chromium (Playwright) against the Streamlit app running locally on the 
 from Table IX's "most novel" row, submits it, and screenshots the live result and the "Model Performance"
 page. I checked by hand that the on-screen probability (97.1%), band (31%-100%), label, novelty warning and
 every Model Performance number match `reports/heart_metrics.json` and the paper's own Tables II and IX. The
-one place the screenshot does *not* match the harness exactly — the live SHAP values (ca +0.136 vs the
+one place the screenshot does *not* match the harness exactly — the live SHAP values (ca +0.134 vs the
 harness's +0.139, etc.) — is disclosed in the paper's own text as a real, unseeded-RNG difference in the
-shipped code, not smoothed over.
+shipped code, not smoothed over. The screenshots were recaptured 2026-09-23 after removing emoji from the
+app (below); the SHAP values changed again between the two captures (a third distinct set of numbers for
+the same patient), which independently confirms the unseeded-RNG explanation rather than a one-off artifact.
 
 **New code-path / provenance claims re-read today:**
 

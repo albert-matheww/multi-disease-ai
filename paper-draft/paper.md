@@ -204,7 +204,7 @@ Streamlit app; Fig. 3 (bottom) is the app's own result panel for that submission
 band 31%-100%, label "Heart Disease Present", a novelty warning ("unlike ~100% of the training
 cohort"), and a live SHAP bar chart topped by `ca` and `cp`. The probability, band and label match
 Table IX exactly, because they are the same model bundle scoring the same row; the SHAP values do not
-match exactly (app: ca +0.136, cp +0.095, thalach +0.054; Table IX's harness run: ca +0.139, cp +0.086,
+match exactly (app: ca +0.134, cp +0.099, thalach +0.050; Table IX's harness run: ca +0.139, cp +0.086,
 thalach +0.055) because the interactive path does not fix a random seed before sampling the k-means
 background (unlike the timing harness in Section V-F, which seeds every call for reproducibility) — a
 gap in the shipped code this comparison surfaced. Both runs agree on the two dominant features and
