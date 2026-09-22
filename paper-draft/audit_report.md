@@ -118,7 +118,12 @@ enlarged threshold/preprocessing comparison counts (24->36 threshold, 44->68 pre
 3. ~~**Harness is untracked.**~~ **Resolved.** All of `paper-draft/` (script harness, results, figures,
    screenshots, `paper.tex`/`.bib`/`.pdf`) is committed to the repository; see the commits following this
    report for the exact set.
-4. Affiliation in the author block is still a placeholder.
+4. ~~Affiliation in the author block is still a placeholder.~~ **Resolved 2026-09-23.** Author block is
+   now Albert Mathew Suni (Reg. No. 23BCE1765), Nandhitha S H (Reg. No. 23BCE1552), and Dr. Vijayraj J
+   (Project Guide, Employee ID 54799), all Vellore Institute of Technology, Chennai, India, as given by
+   the user; no department was given and none was invented. `tools/build_paper.py` was extended
+   (`build_authors()`) to parse a structured `AUTHORS:` block in `paper.md` into IEEEtran's multi-author
+   `\and`-separated format rather than hand-editing the generated `.tex`.
 5. `ledoit2004` remains metadata-only (the publisher host failed TLS verification; not bypassed).
 6. **The screenshots show a real, minor implementation gap**, not previously documented: the interactive SHAP
    path (`src/prediction.py`) does not seed its background sample, so repeated live predictions on the same

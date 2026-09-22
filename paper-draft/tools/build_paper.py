@@ -101,9 +101,30 @@ def table_tex(caption: str, label: str, rows: list[list[str]]) -> str:
     return "\n".join(lines)
 
 
+def build_authors() -> str:
+    """Parse the `AUTHORS:` block (one `- Name | role/id line | affiliation` per person) into an
+    IEEEtran multi-author \\author{} block, each person getting their own name/affiliation pair
+    joined by \\and, matching how IEEEtran lays out author columns."""
+    m = re.search(r"^AUTHORS:\n((?:- .*\n?)+)", SRC, re.M)
+    people = []
+    for line in m.group(1).strip().splitlines():
+        parts = [p.strip() for p in line.lstrip("- ").split("|")]
+        name, role, affil = (parts + ["", ""])[:3]
+        people.append((name, role, affil))
+    blocks = []
+    for name, role, affil in people:
+        role_line = rf"\textit{{{inline(role)}}} \\ " if role else ""
+        blocks.append(
+            rf"\IEEEauthorblockN{{{inline(name)}}}"
+            rf"\IEEEauthorblockA{{{role_line}{inline(affil)}}}"
+        )
+    return "\\and\n".join(blocks)
+
+
 def build_tex() -> str:
     head_re = lambda k: re.search(rf"^{k}:\s*(.*)$", SRC, re.M).group(1).strip()  # noqa: E731
-    title, author, affil = head_re("TITLE"), head_re("AUTHOR"), head_re("AFFILIATION")
+    title = head_re("TITLE")
+    author_tex = build_authors()
     abstract = re.search(r"^ABSTRACT:\n(.*?)\n\nKEYWORDS:", SRC, re.M | re.S).group(1).strip()
     keywords = head_re("KEYWORDS")
     body = SRC[SRC.index("## I."):]
@@ -113,7 +134,7 @@ def build_tex() -> str:
         r"\usepackage{amsmath,amssymb,graphicx,booktabs,tabularx,array,xcolor,url,cite}",
         r"\newcommand{\pending}[1]{\textbf{\textcolor{red}{[PENDING#1]}}}",
         rf"\title{{{inline(title)}}}",
-        rf"\author{{\IEEEauthorblockN{{{inline(author)}}}\IEEEauthorblockA{{{inline(affil)}}}}}",
+        f"\\author{{{author_tex}}}",
         r"\begin{document}", r"\maketitle",
         r"\begin{abstract}", inline(abstract), r"\end{abstract}",
         r"\begin{IEEEkeywords}", inline(keywords), r"\end{IEEEkeywords}",
